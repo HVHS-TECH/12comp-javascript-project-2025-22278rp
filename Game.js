@@ -10,8 +10,8 @@
 /*******************************************************/
 var player;
 var score;
-const canvasWidth = 500;
-const canvasHeight = 500;
+const canvasWidth = 300;
+const canvasHeight = 300;
 
 //ground variables
 let sheetImg;
@@ -29,7 +29,7 @@ function setup() {
 
     //player
 
-    player = new Sprite(100, 0, 16, 16, 'd');
+    player = new Sprite(robotXPos, robotYPos, 16, 16, 'd');
 	player.color = 'orange';
 	player.rotationSpeed = 0;
 
