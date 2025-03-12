@@ -10,11 +10,8 @@
 // Variables
 /*******************************************************/
 var maxSpeed = 10;
-var playerxForce = 0;
-var robotXPos = 100;
 
-var yForce = 0;
-var playerYPos = 0;
+
 
 
 /*******************************************************/
@@ -24,7 +21,7 @@ function robotMovement() {
     console.log("hello");
 
 	//right movement
-	if (kb.pressing ('right')) 
+	/*if (kb.pressing ('right')) 
 	{
 		console.log("right is working");
 		//robotXPos = robotXPos + xForce;
@@ -54,10 +51,12 @@ function robotMovement() {
 		}
 	  }
 
-    /*if (kb.pressing('left')) {
+    */
+   if (kb.pressing('left')) {
 
 		// Set sprite's velocity to the left
 		player.vel.x = -4;
+		//player.vel.x = player.vel.x + maxSpeed;
 	
 	}
 	
@@ -67,7 +66,8 @@ function robotMovement() {
 		player.vel.x = 4;	   
 	
 	}
-	else if (kb.pressing ('up')) 
+
+	else if (kb.pressing ('up') && player.vel.y == 0) 
 		{
 			// Set sprite's velocity to the left
 			player.vel.y = -4;	   
@@ -102,6 +102,10 @@ function robotMovement() {
 			{
 				// Set sprite's velocity to zero
 				player.vel.y = 0;
-			};*/
+			};
         
+}
+
+function robotCollideTile (_mountain,_player) {
+	player.vel.y = 0;
 }

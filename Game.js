@@ -12,12 +12,14 @@ var player;
 var score;
 const canvasWidth = 300;
 const canvasHeight = 300;
+var robotXPos = 100;
+var robotYPos = 0;
 
 //ground variables
 let sheetImg;
 let mountain, water, cobblestone;
 function preload() {
-    sheetImg = loadImage("../assets/images/Textures-16.png");
+    sheetImg = loadImage(".../assets/images/Textures-16.png");
 }
 
 /*******************************************************/
