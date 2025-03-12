@@ -70,4 +70,5 @@ function setup() {
 function draw() {
     clear();
     robotMovement();
+	robotCollideTile();
 }
