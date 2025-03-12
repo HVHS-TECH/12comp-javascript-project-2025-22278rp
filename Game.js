@@ -19,7 +19,7 @@ var robotYPos = 0;
 let sheetImg;
 let mountain, water, cobblestone;
 function preload() {
-    sheetImg = loadImage("../images/Textures-16.png");
+    sheetImg = loadImage("Textures-16.png");
 }
 
 /*******************************************************/
