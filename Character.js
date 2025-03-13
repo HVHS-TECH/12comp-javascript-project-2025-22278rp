@@ -3,15 +3,14 @@
 //Made in P5 Play Java Script
 //by 22278RP
 //tile map by https://piiixl.itch.io/textures
-//movement code sampled from tackoverflow.com/questions/38194362/jumping-code-in-javascript 
 /*******************************************************/
 
 /*******************************************************/
 // Variables
 /*******************************************************/
-var maxSpeed = 10;
-const MOVEMENTSPEED = 1;
-const JUMPSPEED = 6;
+var maxSpeed = 5;
+var MOVEMENTSPEED = 2;
+const JUMPSPEED = 4;
 var jumps = 0;
 
 
@@ -26,6 +25,17 @@ function robotMovement() {{
 
 } else if (kb.pressing('d')) {
 	player.vel.x = MOVEMENTSPEED;
+	MOVEMENTSPEED = MOVEMENTSPEED + 0.25;
+	if (MOVEMENTSPEED >= maxSpeed && kb.pressed('d')) {
+		  MOVEMENTSPEED = maxSpeed;
+		}
+		if (kb.released('d')) {
+	
+			// Set sprite's velocity to zero
+			player.vel.x = 0;
+		
+		}
+
 } 
 
  
@@ -104,19 +114,19 @@ if (kb.presses('w') && player.vel.y == 0) {
 			
 		};
 	
-	if (kb.released('left')) {
+	if (kb.released('a')) {
 	
 		// Set sprite's velocity to zero
 		player.vel.x = 0;
 	
 	}
 	
-	else if (kb.released('right')) 
+	else if (kb.released('d')) 
 	{
 		// Set sprite's velocity to zero
 		player.vel.x = 0;
 	}
-	else if (kb.released('up')) 
+	else if (kb.released('w')) 
 		{
 			// Set sprite's velocity to zero
 			player.vel.y = 0;

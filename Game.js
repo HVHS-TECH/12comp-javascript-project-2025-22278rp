@@ -62,7 +62,7 @@ function setup() {
 		13, 100, //x, y
 		16, 16 //w, h
 	);
-
+keyPressed();
 }
 /*******************************************************/
 // draw loop
@@ -71,4 +71,8 @@ function draw() {
     clear();
     robotMovement();
 	robotCollideTile();
+}
+
+function keyPressed () {
+	console.log(keyCode)
 }
