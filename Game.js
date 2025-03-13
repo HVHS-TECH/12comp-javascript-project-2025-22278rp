@@ -35,23 +35,24 @@ function setup() {
 	player.color = 'orange';
 	player.rotationSpeed = 0;
 
-    mountain = new Group();
+	mountain = new Group()
 	mountain.collider = "static";
 	mountain.spriteSheet = sheetImg;
 	mountain.addAni({w:16, h:16, row:29, col:12});
 	mountain.tile = "m";
 
-	cobblestone = new Group();
+	cobblestone = new Group()
 	cobblestone.collider = "static";
 	cobblestone.spriteSheet = sheetImg;
 	cobblestone.addAni({w:16, h:16, row:30, col:12});
 	cobblestone.tile = "c";
 
-	water = new Group();
+	water = new Group()
 	water.collider = "static";
 	water.spriteSheet = sheetImg;
 	water.addAni({w:16, h:16, row:8, col:0});
 	water.tile = "w";
+
 	new Tiles(
 		[
 			'mmmmm..mmmmmm....',
@@ -71,7 +72,12 @@ function draw() {
     clear();
     robotMovement();
 	robotCollideTile();
+	console.log (MOVEMENTSPEED)
 }
+
+/*******************************************************/
+// Functions
+/*******************************************************/
 
 function keyPressed () {
 	console.log(keyCode)

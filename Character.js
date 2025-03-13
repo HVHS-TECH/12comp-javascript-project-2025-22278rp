@@ -12,6 +12,7 @@ var maxSpeed = 3;
 var MOVEMENTSPEED = 2;
 const JUMPSPEED = 4;
 var jumps = 0;
+player.vel.x = MOVEMENTSPEED;
 
 
 
@@ -35,8 +36,11 @@ function robotMovement() {{
 
 
 } else if (kb.pressing('d')) {
-	player.vel.x = MOVEMENTSPEED;
 	MOVEMENTSPEED = MOVEMENTSPEED + 0.25;
+	/*if (mountain.colliding(player) || cobblestone.colliding(player) || water.colliding(player)) {
+		MOVEMENTSPEED = MOVEMENTSPEED + 0.25;
+	}*/
+	
 	if (MOVEMENTSPEED >= maxSpeed && kb.pressed('d')) {
 		  MOVEMENTSPEED = maxSpeed;
 		}
@@ -44,7 +48,7 @@ function robotMovement() {{
 	
 			// Set sprite's velocity to zero
 			MOVEMENTSPEED = 0;
-			player.vel.x = 0;
+
 		
 		}
 
