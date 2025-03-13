@@ -8,7 +8,7 @@
 /*******************************************************/
 // Variables
 /*******************************************************/
-var maxSpeed = 5;
+var maxSpeed = 3;
 var MOVEMENTSPEED = 2;
 const JUMPSPEED = 4;
 var jumps = 0;
@@ -22,6 +22,17 @@ var jumps = 0;
 function robotMovement() {{
 	if (kb.pressing('a')) {
 	player.vel.x = -MOVEMENTSPEED;
+	/*MOVEMENTSPEED = MOVEMENTSPEED - 0.25;
+	if (MOVEMENTSPEED <= maxSpeed && kb.pressed('a')) {
+		  MOVEMENTSPEED = -maxSpeed;
+		}
+		if (kb.released('d')) {
+	
+			// Set sprite's velocity to zero
+			MOVEMENTSPEED = 0;
+		
+		}*/
+
 
 } else if (kb.pressing('d')) {
 	player.vel.x = MOVEMENTSPEED;
@@ -32,6 +43,7 @@ function robotMovement() {{
 		if (kb.released('d')) {
 	
 			// Set sprite's velocity to zero
+			MOVEMENTSPEED = 0;
 			player.vel.x = 0;
 		
 		}
