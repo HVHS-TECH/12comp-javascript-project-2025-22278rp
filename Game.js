@@ -8,8 +8,9 @@
 /*******************************************************/
 // Variables
 /*******************************************************/
+var gameState = "play";
 var player;
-var score;
+var score = 0;
 const canvasWidth = 300;
 const canvasHeight = 300;
 var robotXPos = 100;
@@ -69,10 +70,13 @@ keyPressed();
 // draw loop
 /*******************************************************/
 function draw() {
-    clear();
-    robotMovement();
-	console.log (MOVEMENTSPEED)
-	
+	if (gameState == "play") {
+        runGame();
+    }
+    else if (gameState == "lose") {
+        loseGame();
+    }
+
 }
 
 /*******************************************************/
@@ -81,4 +85,18 @@ function draw() {
 
 function keyPressed () {
 	console.log(keyCode)
+}
+
+function start () {
+
+}
+
+function runGame () {
+	clear();
+    robotMovement();
+	console.log (MOVEMENTSPEED)
+}
+
+function end () {
+	
 }
