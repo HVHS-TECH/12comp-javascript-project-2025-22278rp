@@ -71,8 +71,8 @@ keyPressed();
 function draw() {
     clear();
     robotMovement();
-	robotCollideTile();
 	console.log (MOVEMENTSPEED)
+	
 }
 
 /*******************************************************/
