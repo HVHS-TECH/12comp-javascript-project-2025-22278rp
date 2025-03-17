@@ -11,8 +11,8 @@
 var gameState = "play";
 var player;
 var score = 0;
-const canvasWidth = 300;
-const canvasHeight = 300;
+const canvasWidth = 660;
+const canvasHeight = 310;
 var robotXPos = 100;
 var robotYPos = 0;
 
@@ -29,6 +29,7 @@ function preload() {
 function setup() {
     cnv = new Canvas(canvasWidth, canvasHeight, "Pixelated x4");
     world.gravity.y = 10;
+	score = 0;
 
     //player
 
@@ -54,8 +55,17 @@ function setup() {
 	water.addAni({w:16, h:16, row:8, col:0});
 	water.tile = "w";
 
+	books = new Group()
+	books.width = 16;
+	books.height = 16;
+	books.collider = "static";
+	//book.addAni({w:16, h:16, row:9, col:0});
+	books.tile = "b";
+
 	new Tiles(
 		[
+			'........b..b.....',
+			'.................',
 			'mmmmm..mmmmmm....',
 			'cccccwwcccccc....',
 			'cccccwwccccccmm..',
@@ -64,7 +74,10 @@ function setup() {
 		13, 100, //x, y
 		16, 16 //w, h
 	);
-keyPressed();
+	keyPressed();
+	if (books.collides(player, playerCollectBook)) {
+		playerCollectBook();
+	}
 }
 /*******************************************************/
 // draw loop
@@ -74,7 +87,7 @@ function draw() {
         runGame();
     }
     else if (gameState == "lose") {
-        loseGame();
+        end();
     }
 
 }
@@ -94,9 +107,23 @@ function start () {
 function runGame () {
 	clear();
     robotMovement();
+	background('grey');
+	displayScore();
 	console.log (MOVEMENTSPEED)
 }
 
 function end () {
 	
 }
+
+function displayScore () {
+    textSize(10);
+    text("Score: "+ score, 0, 15);
+}
+
+function playerCollectBook(b, Player) {
+	// Delete the alien which was hit
+	b.remove();
+	score++
+   
+}	
