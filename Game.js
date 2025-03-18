@@ -47,7 +47,7 @@ function setup() {
 	cobblestone.collider = "static";
 	cobblestone.spriteSheet = sheetImg;
 	cobblestone.addAni({w:16, h:16, row:30, col:12});
-	cobblestone.tile = "c";
+	cobblestone.tile = "s";
 
 	water = new Group()
 	water.collider = "static";
@@ -55,21 +55,34 @@ function setup() {
 	water.addAni({w:16, h:16, row:8, col:0});
 	water.tile = "w";
 
+	//collectables - tile key goes from b in alphabetical order
 	books = new Group()
 	books.width = 16;
 	books.height = 16;
 	books.collider = "static";
-	//book.addAni({w:16, h:16, row:9, col:0});
 	books.tile = "b";
+
+	comic = new Group()
+	comic.width = 16;
+	comic.height = 16;
+	comic.collider = "static";
+	comic.tile = "c";
+
+	dictionary = new Group()
+	dictionary.width = 16;
+	dictionary.height = 16;
+	dictionary.collider = "static";
+	dictionary.tile = "d";
+
 
 	new Tiles(
 		[
-			'........b..b.....',
-			'.................',
-			'mmmmm..mmmmmm....',
-			'cccccwwcccccc....',
-			'cccccwwccccccmm..',
-			'cccccccccccccccmm'
+			'........b..b..........',
+			'......................',
+			'mmmmm..mmmmmm.........',
+			'ssssswwssssss.........',
+			'ssssswwssssssmm....d..',
+			'sssssssssssssssmmmmmmm'
 		],
 		13, 100, //x, y
 		16, 16 //w, h
@@ -77,6 +90,14 @@ function setup() {
 	keyPressed();
 	if (books.collides(player, playerCollectBook)) {
 		playerCollectBook();
+	}
+
+	if (dictionary.collides(player, playerCollectDictionary)) {
+		playerCollectDictionary();
+	}
+
+	if (comic.collides(player, playerCollectComic)) {
+		playerCollectComic();
 	}
 }
 /*******************************************************/
@@ -109,7 +130,7 @@ function runGame () {
     robotMovement();
 	background('grey');
 	displayScore();
-	console.log (MOVEMENTSPEED)
+	console.log (movementSpeed)
 }
 
 function end () {
@@ -121,9 +142,22 @@ function displayScore () {
     text("Score: "+ score, 0, 15);
 }
 
-function playerCollectBook(b, Player) {
-	// Delete the alien which was hit
+function playerCollectBook(b) {
+	// Delete the book when the player touches it
 	b.remove();
-	score++
+	score = score + 100
+   
+}	
+function playerCollectDictionary(d) {
+	// Delete the dictionary when the player touches it
+	d.remove();
+	score = score + 500
+   
+}	
+
+function playerCollectComic(c) {
+	// Deletes the comic when the player touches it
+	c.remove();
+	score = score + 50
    
 }	

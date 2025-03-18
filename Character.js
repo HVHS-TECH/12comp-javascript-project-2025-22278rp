@@ -10,7 +10,7 @@
 /*******************************************************/
 var maxSpeed = 3;
 var friction = 0.25;
-var MOVEMENTSPEED = 0;
+var movementSpeed = 0;
 const JUMPSPEED = 4;
 var acceleration = 0.5;
 
@@ -23,42 +23,42 @@ var acceleration = 0.5;
 function robotMovement() {
 	player.rotation = 0;
 
-	if (MOVEMENTSPEED > friction) {
-		MOVEMENTSPEED = MOVEMENTSPEED - friction;
+	if (movementSpeed > friction) {
+		movementSpeed = movementSpeed - friction;
 
 	}
-	else if (MOVEMENTSPEED < -friction) {
-		MOVEMENTSPEED = MOVEMENTSPEED + friction;
+	else if (movementSpeed < -friction) {
+		movementSpeed = movementSpeed + friction;
 	}
 	else {
-		MOVEMENTSPEED = 0;
+		movementSpeed = 0;
 	}
 
 
 
 	if (kb.pressing('a')) {
-		var tempSpeed = MOVEMENTSPEED;
+		var tempSpeed = movementSpeed;
 		tempSpeed = tempSpeed - acceleration;
 		if (tempSpeed <= -maxSpeed ) {
-			MOVEMENTSPEED = -maxSpeed;
+			movementSpeed = -maxSpeed;
 		}
 		else {
-			MOVEMENTSPEED = tempSpeed;
+			movementSpeed = tempSpeed;
 		}
-		player.vel.x = MOVEMENTSPEED;
+		player.vel.x = movementSpeed;
 
 	} 
 	else if (kb.pressing('d')) 
 	{
-		var tempSpeed = MOVEMENTSPEED;
+		var tempSpeed = movementSpeed;
 		tempSpeed = tempSpeed + acceleration;
 		if (tempSpeed >= maxSpeed ) {
-			MOVEMENTSPEED = maxSpeed;
+			movementSpeed = maxSpeed;
 		}
 		else {
-			MOVEMENTSPEED = tempSpeed;
+			movementSpeed = tempSpeed;
 		}
-		player.vel.x = MOVEMENTSPEED;
+		player.vel.x = movementSpeed;
 	} 
 
 	if (kb.presses('w') && player.vel.y == 0) 
