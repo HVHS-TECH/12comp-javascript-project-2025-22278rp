@@ -10,6 +10,7 @@
 /*******************************************************/
 var gameState = "play";
 var player;
+var issueDesk;
 var score = 0;
 const canvasWidth = 660;
 const canvasHeight = 310;
@@ -37,6 +38,13 @@ function setup() {
 	player.color = 'orange';
 	player.rotationSpeed = 0;
 
+	//Finish line
+
+	issueDesk = new Sprite (600, 40, 32, 64), 'd';
+	issueDesk.collider = "static";
+
+	//Tiles
+
 	mountain = new Group()
 	mountain.collider = "static";
 	mountain.spriteSheet = sheetImg;
@@ -55,22 +63,22 @@ function setup() {
 	water.addAni({w:16, h:16, row:8, col:0});
 	water.tile = "w";
 
-	//collectables - tile key goes from b in alphabetical order
+	//book collectables - tile key goes from b in alphabetical order
 	books = new Group()
-	books.width = 16;
-	books.height = 16;
+	books.width = 10;
+	books.height = 20;
 	books.collider = "static";
 	books.tile = "b";
 
 	comic = new Group()
-	comic.width = 16;
-	comic.height = 16;
+	comic.width = 10;
+	comic.height = 20;
 	comic.collider = "static";
 	comic.tile = "c";
 
 	dictionary = new Group()
-	dictionary.width = 16;
-	dictionary.height = 16;
+	dictionary.width = 15;
+	dictionary.height = 20;
 	dictionary.collider = "static";
 	dictionary.tile = "d";
 
@@ -81,10 +89,10 @@ function setup() {
 			'......................',
 			'mmmmm..mmmmmm.........',
 			'ssssswwssssss.........',
-			'ssssswwssssssmm....d..',
-			'sssssssssssssssmmmmmmm'
+			'ssssswwssssssmm....d........................',
+			'sssssssssssssssmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'
 		],
-		13, 100, //x, y
+		13, 0, //x, y
 		16, 16 //w, h
 	);
 	keyPressed();
@@ -99,6 +107,10 @@ function setup() {
 	if (comic.collides(player, playerCollectComic)) {
 		playerCollectComic();
 	}
+
+	if (issueDesk.collides(player, win)) {
+		gameState == "win"
+	}
 }
 /*******************************************************/
 // draw loop
@@ -107,8 +119,11 @@ function draw() {
 	if (gameState == "play") {
         runGame();
     }
+	else if (gameState == "win") {
+        win();
+    }
     else if (gameState == "lose") {
-        end();
+        lose();
     }
 
 }
@@ -121,19 +136,23 @@ function keyPressed () {
 	console.log(keyCode)
 }
 
-function start () {
-
-}
-
 function runGame () {
 	clear();
     robotMovement();
 	background('grey');
 	displayScore();
-	console.log (movementSpeed)
+	//console.log (movementSpeed)
+	console.log (issueDesk.y)
+
+	camera.x = player.x
+	camera.y = player.y
 }
 
-function end () {
+function win () {
+	
+}
+
+function lose () {
 	
 }
 
