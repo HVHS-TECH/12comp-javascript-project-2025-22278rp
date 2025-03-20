@@ -12,8 +12,9 @@ var gameState = "play";
 var player;
 var issueDesk;
 var score = 0;
-const canvasWidth = 660;
-const canvasHeight = 310;
+var booksFound = 0;
+const CANVAS_WIDTH = 400;
+const CANVAS_HEIGHT = 310;
 var robotXPos = 100;
 var robotYPos = 0;
 
@@ -28,7 +29,7 @@ function preload() {
 // setup
 /*******************************************************/
 function setup() {
-    cnv = new Canvas(canvasWidth, canvasHeight, "Pixelated x4");
+    cnv = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT, "Pixelated x4");
     world.gravity.y = 10;
 	score = 0;
 
@@ -96,21 +97,7 @@ function setup() {
 		16, 16 //w, h
 	);
 	keyPressed();
-	if (books.collides(player, playerCollectBook)) {
-		playerCollectBook();
-	}
-
-	if (dictionary.collides(player, playerCollectDictionary)) {
-		playerCollectDictionary();
-	}
-
-	if (comic.collides(player, playerCollectComic)) {
-		playerCollectComic();
-	}
-
-	if (issueDesk.collides(player, win)) {
-		gameState == "win"
-	}
+	
 }
 /*******************************************************/
 // draw loop
@@ -119,13 +106,12 @@ function draw() {
 	if (gameState == "play") {
         runGame();
     }
-	else if (gameState == "win") {
+	if (gameState == "win") {
         win();
     }
-    else if (gameState == "lose") {
+    if (gameState == "lose") {
         lose();
     }
-
 }
 
 /*******************************************************/
@@ -142,14 +128,71 @@ function runGame () {
 	background('grey');
 	displayScore();
 	//console.log (movementSpeed)
-	console.log (issueDesk.y)
 
 	camera.x = player.x
 	camera.y = player.y
+
+	if (books.collides(player, playerCollectBook)) {
+		playerCollectBook();
+	}
+
+	if (dictionary.collides(player, playerCollectDictionary)) {
+		playerCollectDictionary();
+	}
+
+	if (comic.collides(player, playerCollectComic)) {
+		playerCollectComic();
+	}
+
+	if (issueDesk.collides(player, levelCompleted)) {
+		levelCompleted();
+	}
 }
 
-function win () {
+function levelCompleted () {
+	console.log("I collided")
+	gameState = "win";
 	
+}
+function win () {
+console.log("WINNING")
+
+//Clearing out the screen
+clear();
+player.remove();
+mountain.remove();
+water.remove();
+cobblestone.remove();
+issueDesk.remove();
+books.remove();
+comic.remove();
+dictionary.remove();
+
+//Winning screen
+
+camera.x = CENTER;
+camera. y = CENTER;
+
+background("yellow");
+textSize(20)
+textAlign(CENTER, CENTER);
+text("YOU WON!!", CANVAS_WIDTH/2, 50);
+text("Score: "+ score, CANVAS_WIDTH/2, 100);
+text("Books collected: " + booksFound + "/3", CANVAS_WIDTH/2, 150)
+
+ // Create a button and place it beneath the canvas.
+ let button = createButton('click me');
+ //button(CENTER, CENTER);
+ button.height = 100;
+ button.width = 100;
+
+ button.position(CANVAS_WIDTH/2, CANVAS_HEIGHT/2,);
+
+ // Call repaint() when the button is pressed.
+ button.mousePressed(repaint);
+
+ describe('A gray square with a button that says "click me" beneath it. The square changes color when the button is clicked.');
+
 }
 
 function lose () {
@@ -165,12 +208,14 @@ function playerCollectBook(b) {
 	// Delete the book when the player touches it
 	b.remove();
 	score = score + 100
+	booksFound++
    
 }	
 function playerCollectDictionary(d) {
 	// Delete the dictionary when the player touches it
 	d.remove();
 	score = score + 500
+	booksFound++
    
 }	
 
@@ -178,5 +223,6 @@ function playerCollectComic(c) {
 	// Deletes the comic when the player touches it
 	c.remove();
 	score = score + 50
+	booksFound++
    
 }	
