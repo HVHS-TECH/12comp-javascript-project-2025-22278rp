@@ -11,6 +11,8 @@
 var gameState = "play";
 var player;
 var issueDesk;
+var restartButton;
+let button;
 var score = 0;
 var booksFound = 0;
 const CANVAS_WIDTH = 400;
@@ -23,6 +25,7 @@ let sheetImg;
 let mountain, water, cobblestone;
 function preload() {
     sheetImg = loadImage("Textures-16.png");
+	buttonImg = loadImage("restartButton.png");
 }
 
 /*******************************************************/
@@ -180,19 +183,10 @@ text("YOU WON!!", CANVAS_WIDTH/2, 50);
 text("Score: "+ score, CANVAS_WIDTH/2, 100);
 text("Books collected: " + booksFound + "/3", CANVAS_WIDTH/2, 150)
 
- // Create a button and place it beneath the canvas.
- let button = createButton('click me');
- //button(CENTER, CENTER);
- button.height = 100;
- button.width = 100;
-
- button.position(CANVAS_WIDTH/2, CANVAS_HEIGHT/2,);
-
- // Call repaint() when the button is pressed.
- button.mousePressed(repaint);
-
- describe('A gray square with a button that says "click me" beneath it. The square changes color when the button is clicked.');
-
+restartButton = new Sprite (400, 400);
+restartButton.spriteSheet = buttonImg;
+restartButton.addAni ({w:160, h:160, row:0, col:0,}); 
+restartButton.collider = "static";
 }
 
 function lose () {
@@ -226,3 +220,7 @@ function playerCollectComic(c) {
 	booksFound++
    
 }	
+
+function restart() {
+
+}
