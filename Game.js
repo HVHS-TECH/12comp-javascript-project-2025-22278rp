@@ -5,6 +5,10 @@
 //tile map by https://piiixl.itch.io/textures
 /*******************************************************/
 
+//Things I need to fix
+//-Mouse not defined 
+//- Restart button only appears when game starts with function WIN
+//- collision with books
 /*******************************************************/
 // Variables
 /*******************************************************/
@@ -125,24 +129,17 @@ function draw() {
 // Functions
 /*******************************************************/
 
-function keyPressed () {
-	console.log(keyCode)
-}
-
 function runGame () {
 	clear();
     robotMovement();
 	background('grey');
 	displayScore();
-	//console.log (movementSpeed)
 
 	camera.x = player.x
 	camera.y = player.y
-	console.log(player.y);
 
 	if (player.y >= 300) {
-	console.log ("I LOST :(");
-	gameState = "lose";
+		levelLost();
 	}
 
 	if (books.collides(player, playerCollectBook)) {
@@ -162,50 +159,56 @@ function runGame () {
 	}
 }
 
+function win () {
+console.log("WINNING")
+	mouseInteractRestartButton ()
+
+}
+
+function lose () {
+	console.log ("I LOST :(");
+
+}
+
+function displayScore () {
+    textSize(20);
+    text("Score: "+ score, 0, 15);
+}
+
 function levelCompleted () {
 	console.log("I collided")
 	gameState = "win";
 	score = score + 150
 	//Will change the game to the win screen
+
+	//Clearing out the screen
+	player.remove();
+	mountain.remove();
+	water.remove();
+	cobblestone.remove();
+	issueDesk.remove();
+	books.remove();
+	comic.remove();
+	dictionary.remove();
+
+	//Winning screen
+
+	camera.x = CANVAS_WIDTH/2;
+	camera.y = CANVAS_HEIGHT/2;
+
+	background("yellow");
+	textSize(20)
+	textAlign(CENTER, CENTER);
+	text("YOU WON!!", CANVAS_WIDTH/2, 50);
+	text("Score: "+ score, CANVAS_WIDTH/2, 100);
+	text("Books issued: " + booksFound + "/6", CANVAS_WIDTH/2, 150)
+
+	restart();
 }
 
-function win () {
-console.log("WINNING")
+function levelLost () {
+	gameState = "lose";
 
-//Clearing out the screen
-clear();
-player.remove();
-mountain.remove();
-water.remove();
-cobblestone.remove();
-issueDesk.remove();
-books.remove();
-comic.remove();
-dictionary.remove();
-
-//Winning screen
-
-//mouseInteractRestartButton ()
-
-camera.x = CENTER;
-camera.y = CENTER;
-
-background("yellow");
-textSize(20)
-textAlign(CENTER, CENTER);
-text("YOU WON!!", CANVAS_WIDTH/2, 50);
-text("Score: "+ score, CANVAS_WIDTH/2, 100);
-text("Books issued: " + booksFound + "/3", CANVAS_WIDTH/2, 150)
-
-restartButton = new Sprite (50, 200);
-restartButton.spriteSheet = buttonImg;
-restartButton.addAni ({w:16, h:16, row:0, col:0,}); 
-restartButton.collider = "static";
-//Problem the restart button only appears when the initial data for game state = win not when I reach the finish line
-
-}
-
-function lose () {
 	clear();
 	player.remove();
 	mountain.remove();
@@ -226,19 +229,13 @@ function lose () {
 	textAlign(CENTER, CENTER);
 	text("YOU LOST....", CANVAS_WIDTH/2, 50);
 	text("Score: "+ score, CANVAS_WIDTH/2, 100);
-	text("Books issued: " + booksFound + "/3", CANVAS_WIDTH/2, 150)
-
-	restartButton = new Sprite (400, 400);
-	restartButton.spriteSheet = buttonImg;
-	restartButton.addAni ({w:16, h:16, row:0, col:0,}); 
-	restartButton.collider = "static";
-
+	text("Books issued: " + booksFound + "/6", CANVAS_WIDTH/2, 150)
+	restart();
 
 }
 
-function displayScore () {
-    textSize(20);
-    text("Score: "+ score, 0, 15);
+function keyPressed () {
+	console.log(keyCode)
 }
 
 function playerCollectBook(b) {
@@ -264,7 +261,11 @@ function playerCollectComic(c) {
 }	
 
 function restart() {
-
+	restartButton = new Sprite (50, 200);
+	restartButton.spriteSheet = buttonImg;
+	restartButton.addAni ({w:16, h:16, row:0, col:0,}); 
+	restartButton.collider = "static";
+	//Problem the restart button only appears when the initial data for game state = win not when I reach the finish line
 }
 
 function mouseInteractRestartButton () {
