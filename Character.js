@@ -8,10 +8,10 @@
 /*******************************************************/
 // Variables
 /*******************************************************/
-var maxSpeed = 5;
+var maxSpeed = 3;
 var friction = 0.125;
 var movementSpeed = 0;
-const JUMPSPEED = 4;
+const JUMPSPEED = 5;
 var acceleration = 0.25;
 
 

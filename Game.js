@@ -8,11 +8,10 @@
 /*******************************************************/
 // Variables
 /*******************************************************/
-var gameState = "play";
+var gameState = "win";
 var player;
 var issueDesk;
 var restartButton;
-let button;
 var score = 0;
 var booksFound = 0;
 const CANVAS_WIDTH = 400;
@@ -69,9 +68,11 @@ function setup() {
 
 	//book collectables - tile key goes from b in alphabetical order
 	books = new Group()
-	books.width = 10;
-	books.height = 20;
+	books.width = 32;
+	books.height = 32 ;
 	books.collider = "static";
+	books.spriteSheet = buttonImg;
+	books.addAni ({w:16, h:16, row:0, col:0,}); 
 	books.tile = "b";
 
 	comic = new Group()
@@ -134,6 +135,12 @@ function runGame () {
 
 	camera.x = player.x
 	camera.y = player.y
+	console.log(player.y);
+
+	if (player.y >= 300) {
+	console.log ("I LOST :(");
+	gameState = "lose";
+	}
 
 	if (books.collides(player, playerCollectBook)) {
 		playerCollectBook();
@@ -155,8 +162,10 @@ function runGame () {
 function levelCompleted () {
 	console.log("I collided")
 	gameState = "win";
-	
+	score = score + 150
+	//Will change the game to the win screen
 }
+
 function win () {
 console.log("WINNING")
 
@@ -173,28 +182,59 @@ dictionary.remove();
 
 //Winning screen
 
+mouseInteractRestartButton ()
+
 camera.x = CENTER;
-camera. y = CENTER;
+camera.y = CENTER;
 
 background("yellow");
 textSize(20)
 textAlign(CENTER, CENTER);
 text("YOU WON!!", CANVAS_WIDTH/2, 50);
 text("Score: "+ score, CANVAS_WIDTH/2, 100);
-text("Books collected: " + booksFound + "/3", CANVAS_WIDTH/2, 150)
+text("Books issued: " + booksFound + "/3", CANVAS_WIDTH/2, 150)
 
-restartButton = new Sprite (400, 400);
+restartButton = new Sprite (50, 200);
 restartButton.spriteSheet = buttonImg;
-restartButton.addAni ({w:160, h:160, row:0, col:0,}); 
+restartButton.addAni ({w:16, h:16, row:0, col:0,}); 
 restartButton.collider = "static";
+//Problem the restart button only appears when the initial data for game state = win not when I reach the finish line
+
 }
 
 function lose () {
-	
+	clear();
+	player.remove();
+	mountain.remove();
+	water.remove();
+	cobblestone.remove();
+	issueDesk.remove();
+	books.remove();
+	comic.remove();
+	dictionary.remove();
+
+	//losing screen
+
+	camera.x = CENTER;
+	camera. y = CENTER;
+
+	background("red");
+	textSize(20)
+	textAlign(CENTER, CENTER);
+	text("YOU LOST....", CANVAS_WIDTH/2, 50);
+	text("Score: "+ score, CANVAS_WIDTH/2, 100);
+	text("Books issued: " + booksFound + "/3", CANVAS_WIDTH/2, 150)
+
+	restartButton = new Sprite (400, 400);
+	restartButton.spriteSheet = buttonImg;
+	restartButton.addAni ({w:16, h:16, row:0, col:0,}); 
+	restartButton.collider = "static";
+
+
 }
 
 function displayScore () {
-    textSize(10);
+    textSize(20);
     text("Score: "+ score, 0, 15);
 }
 
@@ -218,9 +258,21 @@ function playerCollectComic(c) {
 	c.remove();
 	score = score + 50
 	booksFound++
-   
 }	
 
 function restart() {
 
+}
+
+function mouseInteractRestartButton () {
+	//not working it says mouse isn't defined
+	if (restartButton.mouse.hovering()) {
+		restartButton.addAni ({w:16, h:16, row:1, col:0,}); 
+	}
+	else {
+		restartButton.addAni ({w:16, h:16, row:0, col:0,}); 	
+	}
+	if (restartButton.mouse.pressing()) {
+		gameState = "play";
+	}
 }
