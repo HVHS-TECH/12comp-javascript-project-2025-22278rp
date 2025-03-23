@@ -183,13 +183,13 @@ function levelCompleted () {
 
 	//Clearing out the screen
 	player.remove();
-	mountain.remove();
-	water.remove();
-	cobblestone.remove();
+	mountain.removeAll();
+	water.removeAll();
+	cobblestone.removeAll();
 	issueDesk.remove();
-	books.remove();
-	comic.remove();
-	dictionary.remove();
+	books.removeAll();
+	comic.removeAll();
+	dictionary.removeAll();
 
 	//Winning screen
 
@@ -212,12 +212,12 @@ function levelLost () {
 	clear();
 	player.remove();
 	mountain.remove();
-	water.remove();
-	cobblestone.remove();
+	water.removeAll();
+	cobblestone.removeAll();
 	issueDesk.remove();
-	books.remove();
-	comic.remove();
-	dictionary.remove();
+	books.removeAll();
+	comic.removeAll();
+	dictionary.removeAll();
 
 	//losing screen
 
@@ -261,7 +261,7 @@ function playerCollectComic(c) {
 }	
 
 function restart() {
-	restartButton = new Sprite (50, 200);
+	restartButton = new Sprite (200, 200);
 	restartButton.spriteSheet = buttonImg;
 	restartButton.addAni ({w:16, h:16, row:0, col:0,}); 
 	restartButton.collider = "static";
@@ -278,5 +278,6 @@ function mouseInteractRestartButton () {
 	}
 	if (restartButton.mouse.pressing()) {
 		gameState = "play";
+		setup();
 	}
 }
