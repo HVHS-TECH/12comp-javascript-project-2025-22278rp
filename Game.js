@@ -8,7 +8,7 @@
 /*******************************************************/
 // Variables
 /*******************************************************/
-var gameState = "win";
+var gameState = "play";
 var player;
 var issueDesk;
 var restartButton;
@@ -25,6 +25,7 @@ let mountain, water, cobblestone;
 function preload() {
     sheetImg = loadImage("Textures-16.png");
 	buttonImg = loadImage("restartButton.png");
+	bookImg = loadImage("books.png");
 }
 
 /*******************************************************/
@@ -68,22 +69,24 @@ function setup() {
 
 	//book collectables - tile key goes from b in alphabetical order
 	books = new Group()
-	books.width = 32;
-	books.height = 32 ;
 	books.collider = "static";
-	books.spriteSheet = buttonImg;
-	books.addAni ({w:16, h:16, row:0, col:0,}); 
+	books.spriteSheet = bookImg;
+	books.addAni ({w:32, h:32, row:0, col:1,}); 
 	books.tile = "b";
 
 	comic = new Group()
-	comic.width = 10;
-	comic.height = 20;
+	comic.width = 32;
+	comic.height = 32;
+	comic.spriteSheet = bookImg;
+	comic.addAni ({w:32, h:32, row:1, col:1,}); 
 	comic.collider = "static";
 	comic.tile = "c";
 
 	dictionary = new Group()
 	dictionary.width = 15;
 	dictionary.height = 20;
+	dictionary.spriteSheet = bookImg;
+	dictionary.addAni ({w:32, h:32, row:1, col:0,}); 
 	dictionary.collider = "static";
 	dictionary.tile = "d";
 
@@ -93,8 +96,8 @@ function setup() {
 			'........b..b..........',
 			'......................',
 			'mmmmm..mmmmmm.........',
-			'ssssswwssssss.........',
-			'ssssswwssssssmm....d........................',
+			'ssssswwssssss......d....c..c.c..............',
+			'ssssswwssssssmm.............................',
 			'sssssssssssssssmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'
 		],
 		13, 0, //x, y
@@ -182,7 +185,7 @@ dictionary.remove();
 
 //Winning screen
 
-mouseInteractRestartButton ()
+//mouseInteractRestartButton ()
 
 camera.x = CENTER;
 camera.y = CENTER;
