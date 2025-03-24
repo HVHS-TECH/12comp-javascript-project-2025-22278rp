@@ -6,9 +6,8 @@
 /*******************************************************/
 
 //Things I need to fix
-//-Mouse not defined 
-//- Restart button only appears when game starts with function WIN
 //- collision with books
+//-What happens after restart
 /*******************************************************/
 // Variables
 /*******************************************************/
@@ -161,12 +160,14 @@ function runGame () {
 
 function win () {
 console.log("WINNING")
-	mouseInteractRestartButton ()
+	mouseInteractRestartButton();
 
 }
 
 function lose () {
 	console.log ("I LOST :(");
+	mouseInteractRestartButton();
+
 
 }
 
@@ -209,7 +210,6 @@ function levelCompleted () {
 function levelLost () {
 	gameState = "lose";
 
-	clear();
 	player.remove();
 	mountain.remove();
 	water.removeAll();
@@ -221,8 +221,8 @@ function levelLost () {
 
 	//losing screen
 
-	camera.x = CENTER;
-	camera. y = CENTER;
+	camera.x = CANVAS_WIDTH/2;
+	camera.y = CANVAS_HEIGHT/2;
 
 	background("red");
 	textSize(20)
@@ -230,6 +230,7 @@ function levelLost () {
 	text("YOU LOST....", CANVAS_WIDTH/2, 50);
 	text("Score: "+ score, CANVAS_WIDTH/2, 100);
 	text("Books issued: " + booksFound + "/6", CANVAS_WIDTH/2, 150)
+
 	restart();
 
 }
@@ -265,11 +266,9 @@ function restart() {
 	restartButton.spriteSheet = buttonImg;
 	restartButton.addAni ({w:16, h:16, row:0, col:0,}); 
 	restartButton.collider = "static";
-	//Problem the restart button only appears when the initial data for game state = win not when I reach the finish line
 }
 
 function mouseInteractRestartButton () {
-	//not working it says mouse isn't defined
 	if (restartButton.mouse.hovering()) {
 		restartButton.addAni ({w:16, h:16, row:1, col:0,}); 
 	}
@@ -279,5 +278,6 @@ function mouseInteractRestartButton () {
 	if (restartButton.mouse.pressing()) {
 		gameState = "play";
 		setup();
+		restartButton.remove();
 	}
 }
