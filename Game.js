@@ -1,8 +1,10 @@
 /*******************************************************/
-// Robot Explorer
+// Library Labyrinth
 //Made in P5 Play Java Script
 //by 22278RP
 //tile map by https://piiixl.itch.io/textures
+//Other textures- books and restart button made by me in Piskel
+//Chat gpt helped with refresh screen code
 /*******************************************************/
 
 //Things I need to fix
@@ -41,7 +43,7 @@ function setup() {
 
     //player
 
-    player = new Sprite(robotXPos, robotYPos, 16, 16, 'd');
+    player = new Sprite(robotXPos, robotYPos, 12, 12, 'd');
 	player.color = 'orange';
 	player.rotationSpeed = 0;
 
@@ -55,19 +57,19 @@ function setup() {
 	mountain = new Group()
 	mountain.collider = "static";
 	mountain.spriteSheet = sheetImg;
-	mountain.addAni({w:16, h:16, row:29, col:12});
+	mountain.addAni({w:16, h:16, row:13, col:7});
 	mountain.tile = "m";
 
 	cobblestone = new Group()
 	cobblestone.collider = "static";
 	cobblestone.spriteSheet = sheetImg;
-	cobblestone.addAni({w:16, h:16, row:30, col:12});
+	cobblestone.addAni({w:16, h:16, row:13, col:2});
 	cobblestone.tile = "s";
 
 	water = new Group()
 	water.collider = "static";
 	water.spriteSheet = sheetImg;
-	water.addAni({w:16, h:16, row:8, col:0});
+	water.addAni({w:16, h:16, row:14, col:1});
 	water.tile = "w";
 
 	//book collectables - tile key goes from b in alphabetical order
@@ -96,11 +98,11 @@ function setup() {
 
 	new Tiles(
 		[
-			'........b..b..........',
-			'......................',
-			'mmmmm..mmmmmm.........',
-			'ssssswwssssss......d....c..c.c..............',
-			'ssssswwssssssmm.............................',
+			'........b..b...................c............',
+			'...........................c................',
+			'mmmmm..mmmmmm...........c......w............',
+			'sssssmmssssss......d.......w...w............',
+			'sssssssssssssmm.........w..w...w............',
 			'sssssssssssssssmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'
 		],
 		13, 0, //x, y
