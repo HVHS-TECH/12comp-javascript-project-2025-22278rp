@@ -17,7 +17,7 @@ var issueDesk;
 var restartButton;
 var score = 0;
 var booksFound = 0;
-const CANVAS_WIDTH = 400;
+const CANVAS_WIDTH = 300;
 const CANVAS_HEIGHT = 310;
 var robotXPos = 100;
 var robotYPos = 0;
@@ -164,18 +164,6 @@ console.log("WINNING")
 
 }
 
-function lose () {
-	console.log ("I LOST :(");
-	mouseInteractRestartButton();
-
-
-}
-
-function displayScore () {
-    textSize(20);
-    text("Score: "+ score, 0, 15);
-}
-
 function levelCompleted () {
 	console.log("I collided")
 	gameState = "win";
@@ -207,6 +195,14 @@ function levelCompleted () {
 	restart();
 }
 
+
+function lose () {
+	console.log ("I LOST :(");
+	mouseInteractRestartButton();
+
+
+}
+
 function levelLost () {
 	gameState = "lose";
 
@@ -227,13 +223,21 @@ function levelLost () {
 	background("red");
 	textSize(20)
 	textAlign(CENTER, CENTER);
-	text("YOU LOST....", CANVAS_WIDTH/2, 50);
+	text("YOU LOST", CANVAS_WIDTH/2, 50);
 	text("Score: "+ score, CANVAS_WIDTH/2, 100);
 	text("Books issued: " + booksFound + "/6", CANVAS_WIDTH/2, 150)
 
 	restart();
 
 }
+
+function displayScore () {
+    textSize(20);
+    text("Score: "+ score, 0, 15);
+}
+
+
+
 
 function keyPressed () {
 	console.log(keyCode)
@@ -262,7 +266,7 @@ function playerCollectComic(c) {
 }	
 
 function restart() {
-	restartButton = new Sprite (200, 200);
+	restartButton = new Sprite (CANVAS_WIDTH/2, 200);
 	restartButton.spriteSheet = buttonImg;
 	restartButton.addAni ({w:16, h:16, row:0, col:0,}); 
 	restartButton.collider = "static";
@@ -276,8 +280,6 @@ function mouseInteractRestartButton () {
 		restartButton.addAni ({w:16, h:16, row:0, col:0,}); 	
 	}
 	if (restartButton.mouse.pressing()) {
-		gameState = "play";
-		setup();
-		restartButton.remove();
+		window.location.href = "Game.html";
 	}
 }
