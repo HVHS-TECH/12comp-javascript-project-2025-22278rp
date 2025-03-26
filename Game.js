@@ -19,7 +19,7 @@ var issueDesk;
 var restartButton;
 var score = 0;
 var booksFound = 0;
-const CANVAS_WIDTH = 300;
+const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 310;
 var robotXPos = 100;
 var robotYPos = 0;
@@ -37,13 +37,13 @@ function preload() {
 // setup
 /*******************************************************/
 function setup() {
-    cnv = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT, "Pixelated x4");
+    cnv = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT, "Pixelated x3");
     world.gravity.y = 10;
 	score = 0;
 
     //player
 
-    player = new Sprite(robotXPos, robotYPos, 12, 12, 'd');
+    player = new Sprite(robotXPos, robotYPos, 10, 10, 'd');
 	player.color = 'orange';
 	player.rotationSpeed = 0;
 
@@ -74,35 +74,32 @@ function setup() {
 
 	//book collectables - tile key goes from b in alphabetical order
 	books = new Group()
-	books.collider = "static";
+	books.collider = "none";
 	books.spriteSheet = bookImg;
-	books.addAni ({w:32, h:32, row:0, col:1,}); 
+	books.addAni ({w:16, h:16, row:0, col:1,}); 
 	books.tile = "b";
 
 	comic = new Group()
-	comic.width = 32;
-	comic.height = 32;
 	comic.spriteSheet = bookImg;
-	comic.addAni ({w:32, h:32, row:1, col:1,}); 
-	comic.collider = "static";
+	comic.addAni ({w:16, h:16, row:1, col:1,}); 
+	comic.collider = "none";
 	comic.tile = "c";
 
 	dictionary = new Group()
-	dictionary.width = 15;
-	dictionary.height = 20;
 	dictionary.spriteSheet = bookImg;
-	dictionary.addAni ({w:32, h:32, row:1, col:0,}); 
-	dictionary.collider = "static";
+	dictionary.addAni ({w:16, h:16, row:1, col:0,}); 
+	dictionary.collider = "none";
 	dictionary.tile = "d";
 
 
 	new Tiles(
 		[
-			'........b..b...................c............',
-			'...........................c................',
-			'mmmmm..mmmmmm...........c......w............',
-			'sssssmmssssss......d.......w...w............',
-			'sssssssssssssmm.........w..w...w............',
+			'............................................',
+			'.................................c..........',
+			'........b..b....................ww..........',
+			'mmmmm..mmmmmm................c..ww..........',
+			'sssssmmssssss............c..ww..ww..........',
+			'sssssssssssssmm....d....ww..ww..ww..........',
 			'sssssssssssssssmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'
 		],
 		13, 0, //x, y
@@ -143,15 +140,15 @@ function runGame () {
 		levelLost();
 	}
 
-	if (books.collides(player, playerCollectBook)) {
+	if (books.overlaps(player, playerCollectBook)) {
 		playerCollectBook();
 	}
 
-	if (dictionary.collides(player, playerCollectDictionary)) {
+	if (dictionary.overlaps(player, playerCollectDictionary)) {
 		playerCollectDictionary();
 	}
 
-	if (comic.collides(player, playerCollectComic)) {
+	if (comic.overlaps(player, playerCollectComic)) {
 		playerCollectComic();
 	}
 
@@ -201,8 +198,6 @@ function levelCompleted () {
 function lose () {
 	console.log ("I LOST :(");
 	mouseInteractRestartButton();
-
-
 }
 
 function levelLost () {
