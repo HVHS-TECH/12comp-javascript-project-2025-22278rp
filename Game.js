@@ -3,6 +3,7 @@
 //Made in P5 Play Java Script
 //by 22278RP
 //tile map by https://piiixl.itch.io/textures
+//Library assets by https://manu-art.itch.io/library-asset-pack 
 //Other textures- books and restart button made by me in Piskel
 //Chat gpt helped with refresh screen code
 /*******************************************************/
@@ -19,8 +20,8 @@ var issueDesk;
 var restartButton;
 var score = 0;
 var booksFound = 0;
-const CANVAS_WIDTH = 400;
-const CANVAS_HEIGHT = 310;
+const CANVAS_WIDTH = 600;
+const CANVAS_HEIGHT = 320;
 var robotXPos = 100;
 var robotYPos = 0;
 
@@ -28,16 +29,17 @@ var robotYPos = 0;
 let sheetImg;
 let mountain, water, cobblestone, lava;
 function preload() {
-    sheetImg = loadImage("Textures-16.png");
-	buttonImg = loadImage("restartButton.png");
-	bookImg = loadImage("books.png");
+    sheetImg = loadImage("images/Textures-16.png");
+	buttonImg = loadImage("images/restartButton.png");
+	bookImg = loadImage("images/books.png");
+	bgImg = loadImage("images/Background.png");
 }
 
 /*******************************************************/
 // setup
 /*******************************************************/
 function setup() {
-    cnv = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT, "Pixelated x3");
+    cnv = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     world.gravity.y = 10;
 	score = 0;
 
@@ -57,19 +59,19 @@ function setup() {
 	mountain = new Group()
 	mountain.collider = "static";
 	mountain.spriteSheet = sheetImg;
-	mountain.addAni({w:16, h:16, row:13, col:7});
+	mountain.addAni({w:16, h:16, row:14, col:0});
 	mountain.tile = "m";
 
 	cobblestone = new Group()
 	cobblestone.collider = "static";
 	cobblestone.spriteSheet = sheetImg;
-	cobblestone.addAni({w:16, h:16, row:13, col:2});
+	cobblestone.addAni({w:16, h:16, row:13, col:4});
 	cobblestone.tile = "s";
 
 	water = new Group()
 	water.collider = "static";
 	water.spriteSheet = sheetImg;
-	water.addAni({w:16, h:16, row:14, col:1});
+	water.addAni({w:16, h:16, row:14, col:2});
 	water.tile = "w";
 
 	lava = new Group()
@@ -105,16 +107,18 @@ function setup() {
 			'............................................',
 			'............................................',
 			'............................................',
-			'mmmmmm..w..w..w..s..........................',
-			'ssssss..w..w..w..s..........................',
-			'ssssss..w..w..w..s..........................',
-			'ssssss..w..w..w..s.........................',
-			'ssssssllsllslls..s..........................',
-			'ssssssssssssss...s..........................',
-			's...............s...........................',
-			's...............s...........................',
-			's...............s...........................',
-			'sll.............s...........................',
+			'mmmmmm..w..w..w..mm.........................',
+			'ssssss..w..w..w..ss.........................',
+			'ssssss..w..w..w..ss.........................',
+			'ssssss..w..w..w..ss.........................',
+			'ssssssllsllslls..ss.........................',
+			'ssssssssssssss...ss.........................',
+			's................ss.........................',
+			's...............sss.........................',
+			's...............sss.........................',
+			's..mmm.....mmm..sss.........................',
+			's...............sss.........................',
+			'sllllll.d.llllllsss.........................',
 			'ssssssssssssssssssssssssssssssssssssssssssss'
 		],
 		13, 0, //x, y
@@ -145,7 +149,7 @@ function draw() {
 function runGame () {
 	clear();
     robotMovement();
-	background('grey');
+	background(bgImg);
 	displayScore();
 
 	camera.x = player.x
@@ -226,6 +230,7 @@ function levelLost () {
 	player.remove();
 	mountain.remove();
 	water.removeAll();
+	lava.removeAll();
 	cobblestone.removeAll();
 	issueDesk.remove();
 	books.removeAll();
@@ -249,8 +254,9 @@ function levelLost () {
 }
 
 function displayScore () {
-    textSize(20);
-    text("Score: "+ score, 0, 15);
+    textSize(100);
+    text("Score: "+ score, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
+	color("white");
 }
 
 
