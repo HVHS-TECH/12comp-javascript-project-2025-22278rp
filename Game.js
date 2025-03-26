@@ -26,7 +26,7 @@ var robotYPos = 0;
 
 //ground variables
 let sheetImg;
-let mountain, water, cobblestone;
+let mountain, water, cobblestone, lava;
 function preload() {
     sheetImg = loadImage("Textures-16.png");
 	buttonImg = loadImage("restartButton.png");
@@ -72,6 +72,12 @@ function setup() {
 	water.addAni({w:16, h:16, row:14, col:1});
 	water.tile = "w";
 
+	lava = new Group()
+	lava.collider = "static";
+	lava.spriteSheet = sheetImg;
+	lava.addAni({w:16, h:16, row:9, col:0});
+	lava.tile = "l";
+
 	//book collectables - tile key goes from b in alphabetical order
 	books = new Group()
 	books.collider = "none";
@@ -95,12 +101,21 @@ function setup() {
 	new Tiles(
 		[
 			'............................................',
-			'.................................c..........',
-			'........b..b....................ww..........',
-			'mmmmm..mmmmmm................c..ww..........',
-			'sssssmmssssss............c..ww..ww..........',
-			'sssssssssssssmm....d....ww..ww..ww..........',
-			'sssssssssssssssmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'
+			'............................................',
+			'............................................',
+			'............................................',
+			'............................................',
+			'mmmmmm..w..w..w..s..........................',
+			'ssssss..w..w..w..s..........................',
+			'ssssss..w..w..w..s..........................',
+			'ssssss..w..w..w..s.........................',
+			'ssssssllsllslls..s..........................',
+			'ssssssssssssss...s..........................',
+			's...............s...........................',
+			's...............s...........................',
+			's...............s...........................',
+			'sll.............s...........................',
+			'ssssssssssssssssssssssssssssssssssssssssssss'
 		],
 		13, 0, //x, y
 		16, 16 //w, h
@@ -155,6 +170,11 @@ function runGame () {
 	if (issueDesk.collides(player, levelCompleted)) {
 		levelCompleted();
 	}
+
+	if (lava.collides(player, levelLost)) {
+		levelLost();
+	}
+	
 }
 
 function win () {
