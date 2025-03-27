@@ -22,7 +22,7 @@ var score = 0;
 var booksFound = 0;
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 320;
-var robotXPos = 100;
+var robotXPos = 50;
 var robotYPos = 0;
 
 //ground variables
@@ -120,10 +120,10 @@ function setup() {
 			'mss...............ssss.......................s',
 			'mss..mmm.....mmm..ssss.......................s',
 			'mss...............ssss.......................s',
-			'msslllll.d.lllllllssss.......................s',
+			'mssllllll.d.llllllssss.......................s',
 			'msssssssssssssssssssssssssssssssssssssssssssss'
 		],
-		13, 0, //x, y
+		0, 0, //x, y
 		16, 16 //w, h
 	);
 	keyPressed();
@@ -255,7 +255,7 @@ function levelLost () {
 	textAlign(CENTER, CENTER);
 	text("YOU LOST", CANVAS_WIDTH/2, 50);
 	text("Score: "+ score, CANVAS_WIDTH/2, 100);
-	text("Books issued: " + booksFound + "/6", CANVAS_WIDTH/2, 150)
+	text("Books issued: " + booksFound + "/3", CANVAS_WIDTH/2, 150)
 
 	restart();
 
@@ -266,9 +266,6 @@ function displayScore () {
     text("Score: "+ score, 0, 20);
 	fill("white");
 }
-
-
-
 
 function keyPressed () {
 	console.log(keyCode)
