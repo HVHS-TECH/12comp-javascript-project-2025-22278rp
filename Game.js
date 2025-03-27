@@ -39,7 +39,7 @@ function preload() {
 // setup
 /*******************************************************/
 function setup() {
-    cnv = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+    cnv = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT, 'pixelated x2');
     world.gravity.y = 10;
 	score = 0;
 
@@ -51,7 +51,7 @@ function setup() {
 
 	//Finish line
 
-	issueDesk = new Sprite (600, 40, 32, 64), 'd';
+	issueDesk = new Sprite (651, 220, 32, 64), 'd';
 	issueDesk.collider = "static";
 
 	//Tiles
@@ -102,24 +102,26 @@ function setup() {
 
 	new Tiles(
 		[
-			'............................................',
-			'............................................',
-			'............................................',
-			'............................................',
-			'............................................',
-			'mmmmmm..w..w..w..mm.........................',
-			'ssssss..w..w..w..ss.........................',
-			'ssssss..w..w..w..ss.........................',
-			'ssssss..w..w..w..ss.........................',
-			'ssssssllsllslls..ss.........................',
-			'ssssssssssssss...ss.........................',
-			's................ss.........................',
-			's...............sss.........................',
-			's...............sss.........................',
-			's..mmm.....mmm..sss.........................',
-			's...............sss.........................',
-			'sllllll.d.llllllsss.........................',
-			'ssssssssssssssssssssssssssssssssssssssssssss'
+			'm............................................s',
+			'm............................................s',
+			'm............................................s',
+			'm............................................s',
+			'm.........c...b..............................s',
+			'mmmmmmm...ww..ww..mmmm.......................s',
+			'mssssss...ww..ww..ssss.......................s',
+			'mssssss...ww..ww..ssss.......................s',
+			'mssssss...ww..ww..ssss...mmm.................s',
+			'msssssslllssllss..ssss.......................s',
+			'msssssssssssssss..ssss.......................s',
+			'msssssssssssssss..ssss........mmm............s',
+			'msssssssssssssss..ssss.......................s',
+			'mss..........................................s',
+			'mss..........................................s',
+			'mss...............ssss.......................s',
+			'mss..mmm.....mmm..ssss.......................s',
+			'mss...............ssss.......................s',
+			'msslllll.d.lllllllssss.......................s',
+			'msssssssssssssssssssssssssssssssssssssssssssss'
 		],
 		13, 0, //x, y
 		16, 16 //w, h
@@ -149,6 +151,7 @@ function draw() {
 function runGame () {
 	clear();
     robotMovement();
+	console.log (player.x);
 	background(bgImg);
 	displayScore();
 
@@ -184,6 +187,7 @@ function runGame () {
 function win () {
 console.log("WINNING")
 	mouseInteractRestartButton();
+	
 
 }
 
@@ -202,6 +206,7 @@ function levelCompleted () {
 	books.removeAll();
 	comic.removeAll();
 	dictionary.removeAll();
+	lava.removeAll();
 
 	//Winning screen
 
@@ -210,10 +215,11 @@ function levelCompleted () {
 
 	background("yellow");
 	textSize(20)
+	fill("black");
 	textAlign(CENTER, CENTER);
 	text("YOU WON!!", CANVAS_WIDTH/2, 50);
 	text("Score: "+ score, CANVAS_WIDTH/2, 100);
-	text("Books issued: " + booksFound + "/6", CANVAS_WIDTH/2, 150)
+	text("Books issued: " + booksFound + "/3", CANVAS_WIDTH/2, 150)
 
 	restart();
 }
@@ -222,6 +228,7 @@ function levelCompleted () {
 function lose () {
 	console.log ("I LOST :(");
 	mouseInteractRestartButton();
+
 }
 
 function levelLost () {
@@ -244,6 +251,7 @@ function levelLost () {
 
 	background("red");
 	textSize(20)
+	fill("black");
 	textAlign(CENTER, CENTER);
 	text("YOU LOST", CANVAS_WIDTH/2, 50);
 	text("Score: "+ score, CANVAS_WIDTH/2, 100);
@@ -254,9 +262,9 @@ function levelLost () {
 }
 
 function displayScore () {
-    textSize(100);
-    text("Score: "+ score, CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
-	color("white");
+    textSize(20);
+    text("Score: "+ score, 0, 20);
+	fill("white");
 }
 
 
