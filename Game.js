@@ -27,7 +27,7 @@ var robotYPos = 0;
 
 //ground variables
 let sheetImg;
-let mountain, water, cobblestone, lava;
+let wood, bookBoxes, planks, lava;
 function preload() {
     sheetImg = loadImage("images/Textures-16.png");
 	buttonImg = loadImage("images/restartButton.png");
@@ -54,74 +54,74 @@ function setup() {
 	issueDesk = new Sprite (651, 220, 32, 64), 'd';
 	issueDesk.collider = "static";
 
-	//Tiles
+	//Tiles - tile key goes from a in alphabetical order
 
-	mountain = new Group()
-	mountain.collider = "static";
-	mountain.spriteSheet = sheetImg;
-	mountain.addAni({w:16, h:16, row:14, col:0});
-	mountain.tile = "m";
+	wood = new Group()
+	wood.collider = "static";
+	wood.spriteSheet = sheetImg;
+	wood.addAni({w:16, h:16, row:14, col:0});
+	wood.tile = "a";
 
-	cobblestone = new Group()
-	cobblestone.collider = "static";
-	cobblestone.spriteSheet = sheetImg;
-	cobblestone.addAni({w:16, h:16, row:13, col:4});
-	cobblestone.tile = "s";
+	planks = new Group()
+	planks.collider = "static";
+	planks.spriteSheet = sheetImg;
+	planks.addAni({w:16, h:16, row:13, col:4});
+	planks.tile = "b";
 
-	water = new Group()
-	water.collider = "static";
-	water.spriteSheet = sheetImg;
-	water.addAni({w:16, h:16, row:14, col:2});
-	water.tile = "w";
+	bookBoxes = new Group()
+	bookBoxes.collider = "static";
+	bookBoxes.spriteSheet = sheetImg;
+	bookBoxes.addAni({w:16, h:16, row:14, col:2});
+	bookBoxes.tile = "c";
 
 	lava = new Group()
 	lava.collider = "static";
 	lava.spriteSheet = sheetImg;
 	lava.addAni({w:16, h:16, row:9, col:0});
-	lava.tile = "l";
+	lava.tile = "d";
 
 	//book collectables - tile key goes from b in alphabetical order
 	books = new Group()
 	books.collider = "none";
 	books.spriteSheet = bookImg;
 	books.addAni ({w:16, h:16, row:0, col:1,}); 
-	books.tile = "b";
+	books.tile = "e";
 
 	comic = new Group()
 	comic.spriteSheet = bookImg;
 	comic.addAni ({w:16, h:16, row:1, col:1,}); 
 	comic.collider = "none";
-	comic.tile = "c";
+	comic.tile = "f";
 
 	dictionary = new Group()
 	dictionary.spriteSheet = bookImg;
 	dictionary.addAni ({w:16, h:16, row:1, col:0,}); 
 	dictionary.collider = "none";
-	dictionary.tile = "d";
+	dictionary.tile = "g";
 
 
 	new Tiles(
 		[
-			'm............................................s',
-			'm............................................s',
-			'm............................................s',
-			'm............................................s',
-			'm.........c...b..............................s',
-			'mmmmmmm...ww..ww..mmmm.......................s',
-			'mssssss...ww..ww..ssss.......................s',
-			'mssssss...ww..ww..ssss.......................s',
-			'mssssss...ww..ww..ssss...mmm.................s',
-			'msssssslllssllss..ssss.......................s',
-			'msssssssssssssss..ssss.......................s',
-			'msssssssssssssss..ssss........mmm............s',
-			'msssssssssssssss..ssss.......................s',
-			'mss..........................................s',
-			'mss..........................................s',
-			'mss...............ssss.......................s',
-			'mss..mmm.....mmm..ssss.......................s',
-			'mss...............ssss.......................s',
-			'mssllllll.d.llllllssss.......................s',
-			'msssssssssssssssssssssssssssssssssssssssssssss'
+			'a............................................b',
+			'a............................................b',
+			'a............................................b',
+			'a............................................b',
+			'a.........f...e..............................b',
+			'aaaaaaa...cc..cc..aaaa.......................b',
+			'abbbbbb...cc..cc..bbbb.......................b',
+			'abbbbbb...cc..cc..bbbb.......................b',
+			'abbbbbb...cc..cc..bbbb...aaa.................b',
+			'abbbbbbdddbbddbb..bbbb.......................b',
+			'abbbbbbbbbbbbbbb..bbbb.......................b',
+			'abbbbbbbbbbbbbbb..bbbb........aaa............b',
+			'abbbbbbbbbbbbbbb..bbbb.......................b',
+			'abb..........................................b',
+			'abb..........................................b',
+			'abb...............bbbb.......................b',
+			'abb..aaa.....aaa..bbbb.......................b',
+			'abb...............bbbb.......................b',
+			'abbdddddd.g.ddddddbbbb.......................b',
+			'abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
 		],
 		0, 0, //x, y
 		16, 16 //w, h
@@ -130,7 +130,7 @@ function setup() {
 	
 }
 /*******************************************************/
-// draw loop
+// draw doop
 /*******************************************************/
 function draw() {
 	if (gameState == "play") {
@@ -199,9 +199,9 @@ function levelCompleted () {
 
 	//Clearing out the screen
 	player.remove();
-	mountain.removeAll();
-	water.removeAll();
-	cobblestone.removeAll();
+	wood.removeAll();
+	bookBoxes.removeAll();
+	planks.removeAll();
 	issueDesk.remove();
 	books.removeAll();
 	comic.removeAll();
@@ -235,10 +235,10 @@ function levelLost () {
 	gameState = "lose";
 
 	player.remove();
-	mountain.remove();
-	water.removeAll();
+	wood.remove();
+	bookBoxes.removeAll();
 	lava.removeAll();
-	cobblestone.removeAll();
+	planks.removeAll();
 	issueDesk.remove();
 	books.removeAll();
 	comic.removeAll();
