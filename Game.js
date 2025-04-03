@@ -13,14 +13,16 @@ tasks:
 - Robot animations
 - books found array
 - level design
+- Health sprite
+- add return functions
+- lava physics
 /*******************************************************/
 // Variables
 /*******************************************************/
 var gameState = "play";
-var player;
-var issueDesk;
-var restartButton;
+
 var score = 0;
+var health = 5;
 var booksFound = 0;
 var booksFoundGroup;
 const CANVAS_WIDTH = 450;
@@ -32,13 +34,21 @@ var robotYPos = 0;
 let sheetImg;
 let wood, bookBoxes, planks, lava;
 
+//Special blocks
+var issueDesk;
+var restartButton;
+
 //player
+
+var player;
+
 //let playerAni
 function preload() {
 	sheetImg = loadImage("images/Textures-16.png");
 	buttonImg = loadImage("images/restartButton.png");
 	bookImg = loadImage("images/books.png");
 	bgImg = loadImage("images/Background.png");
+	hpImg = loadImage("images/HP.png");
 
 }
 
@@ -162,14 +172,23 @@ function runGame() {
 	console.log(player.x);
 	background(bgImg);
 	displayScore();
+	healthbar();
 
 	camera.x = player.x
 	camera.y = player.y
 
-	if (player.y >= 300) {
-		levelLost();
+	if (player.collides (lava) ) {
+		player.vel.y = -5; 
+		player.vel.x = 1; 
+		health = (health - 1);
+		console.log(health)
 	}
 
+	if (player.y >= 300 || (health <= 0)) 
+	{
+		levelLost();
+	}
+	
 	if (books.overlaps(player, playerCollectBook)) {
 		playerCollectBook();
 	}
@@ -184,10 +203,6 @@ function runGame() {
 
 	if (issueDesk.collides(player, levelCompleted)) {
 		levelCompleted();
-	}
-
-	if (lava.collides(player, levelLost)) {
-		levelLost();
 	}
 
 }
@@ -330,3 +345,20 @@ function booksCollectedUI() {
 		bookFoundSprite.addAni({ w: 16, h: 16, row: 0, col: 0, });
 	  }
 }
+
+function healthbar() {
+	fill(255); 
+	textSize(20); 
+	text("HP:", 15, 50);
+	hpBlocks = new Group();
+	for (var i = 0; i < health; i++) {
+		
+		fill(255, 0, 0);
+		noStroke();
+		rect(90 + 30 * i, 40, 20, 20); 
+		hpBlocks.add(rect);
+		
+		
+	  }
+}
+
