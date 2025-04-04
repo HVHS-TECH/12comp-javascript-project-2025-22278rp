@@ -25,7 +25,7 @@ var score = 0;
 var health = 5;
 var booksFound = 0;
 var booksFoundGroup;
-const CANVAS_WIDTH = 450;
+const CANVAS_WIDTH = 768;
 const CANVAS_HEIGHT = 450;
 var robotXPos = 50;
 var robotYPos = 0;
@@ -40,7 +40,8 @@ var restartButton;
 
 //player
 
-var player;
+let player;
+let playerAni;
 
 //let playerAni
 function preload() {
@@ -49,6 +50,7 @@ function preload() {
 	bookImg = loadImage("images/books.png");
 	bgImg = loadImage("images/Background.png");
 	hpImg = loadImage("images/HP.png");
+	playerAni = loadImage("images/playerSpritesheet.png")
 
 }
 
@@ -60,12 +62,27 @@ function setup() {
 	world.gravity.y = 10;
 	score = 0;
 	booksFoundGroup = new Group ();
+	hpBlocks = new Group();
 
 	//player
 
-	player = new Sprite(robotXPos, robotYPos, 10, 10, 'd');
-	//player.spriteSheet = images / 'playerSpritesheet';
+	player = new Sprite(robotXPos, robotYPos, 32, 32, 'd');
+	player.spriteSheet = playerAni;
+	player.anis.offset.x = 2;
+	player.anis.frameDelay = 8;
 	player.rotationSpeed = 0;
+	player.scale.x = 1;
+	player.scale.y = 1;
+
+	player.addAnis({
+		stand: { row: 0, frames: 5 },
+		run: { row: 0, col: 6, frames: 3 },
+		jump: {row: 1, col: 4, frames: 5},
+		fall: {row: 2, frames: 3},
+		damaged: {row: 4, col: 4, frames: 2},
+		destroyed: {row: 4, col: 4, frames: 5}
+	});
+	player.changeAni('stand');
 
 	//Finish line
 
@@ -98,7 +115,6 @@ function setup() {
 	lava.addAni({ w: 16, h: 16, row: 9, col: 0 });
 	lava.tile = "d";
 
-	//book collectables - tile key goes from b in alphabetical order
 	books = new Group()
 	books.collider = "none";
 	books.spriteSheet = bookImg;
@@ -166,10 +182,10 @@ function draw() {
 // Functions
 /*******************************************************/
 
-function runGame() {
+function runGame() 
+{
 	clear();
 	robotMovement();
-	console.log(player.x);
 	background(bgImg);
 	displayScore();
 	healthbar();
@@ -177,9 +193,19 @@ function runGame() {
 	camera.x = player.x
 	camera.y = player.y
 
+	if (kb.pressing('d')) {
+		player.changeAni('run');
+		player.scale.x = 1; // Make sure sprite faces right (not flipped)
+	} else if (kb.pressing('a')) {
+		player.changeAni('run');
+		player.scale.x = -1; // Flip sprite to face left
+	} else { // If neither 'd' nor 'a' are pressed
+		player.changeAni('stand');
+	}
+
 	if (player.collides (lava) ) {
 		player.vel.y = -5; 
-		player.vel.x = 1; 
+		//player.vel.x = 0; 
 		health = (health - 1);
 		console.log(health)
 	}
@@ -230,6 +256,7 @@ function levelCompleted() {
 	comic.removeAll();
 	dictionary.removeAll();
 	lava.removeAll();
+	hpBlocks.removeAll();
 
 	//Winning screen
 
@@ -268,6 +295,7 @@ function levelLost() {
 	books.removeAll();
 	comic.removeAll();
 	dictionary.removeAll();
+	hpBlocks.removeAll();
 
 	//losing screen
 
@@ -347,18 +375,24 @@ function booksCollectedUI() {
 }
 
 function healthbar() {
+	hpBlocks.removeAll();
 	fill(255); 
 	textSize(20); 
-	text("HP:", 15, 50);
-	hpBlocks = new Group();
-	for (var i = 0; i < health; i++) {
+	text("HP:", 150, 20);
+	for (var i = 0; i < health; i++) 
+	{
 		
-		fill(255, 0, 0);
+		let block = new Sprite (200 + 30 * i, 15, 20, 20); 
+		block.colour = ("red");
+		block.spriteSheet = hpImg;
+		block.addAni({ w: 32, h: 32, row: 0, col: 0 });
 		noStroke();
-		rect(90 + 30 * i, 40, 20, 20); 
-		hpBlocks.add(rect);
+		block.collider = "none";
+		hpBlocks.add(block);
 		
 		
-	  }
+	}
+	// Update and draw the health blocks in the group
+  	hpBlocks.draw();
 }
 
