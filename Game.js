@@ -13,7 +13,6 @@ tasks:
 - Robot animations
 - books found array
 - level design
-- Health sprite
 - add return functions
 - lava physics
 /*******************************************************/
@@ -25,8 +24,8 @@ var score = 0;
 var health = 5;
 var booksFound = 0;
 var booksFoundGroup;
-const CANVAS_WIDTH = 768;
-const CANVAS_HEIGHT = 450;
+const CANVAS_WIDTH = 450;
+const CANVAS_HEIGHT = 300;
 var robotXPos = 50;
 var robotYPos = 0;
 
@@ -50,15 +49,15 @@ function preload() {
 	bookImg = loadImage("images/books.png");
 	bgImg = loadImage("images/Background.png");
 	hpImg = loadImage("images/HP.png");
-	playerAni = loadImage("images/playerSpritesheet.png")
-
+	playerAni = loadImage("images/playerSpritesheet.png");
+	librarySheetImg = loadImage("images/libraryTileset.png");
 }
 
 /*******************************************************/
 // setup
 /*******************************************************/
 function setup() {
-	cnv = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT, 'pixelated x2');
+	cnv = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT, 'pixelated x3');
 	world.gravity.y = 10;
 	score = 0;
 	booksFoundGroup = new Group ();
@@ -70,15 +69,14 @@ function setup() {
 	player.spriteSheet = playerAni;
 	player.anis.offset.x = 2;
 	player.anis.frameDelay = 8;
-	player.rotationSpeed = 0;
 	player.scale.x = 1;
 	player.scale.y = 1;
 
 	player.addAnis({
 		stand: { row: 0, frames: 5 },
-		run: { row: 0, col: 6, frames: 3 },
-		jump: {row: 1, col: 4, frames: 5},
-		fall: {row: 2, frames: 3},
+		run: { row: 0, col: 6, frames: 4 },
+		jump: {row: 1, col: 1, frames: 10},
+		fall: {row: 1, col: 6, frames: 4},
 		damaged: {row: 4, col: 4, frames: 2},
 		destroyed: {row: 4, col: 4, frames: 5}
 	});
@@ -133,28 +131,35 @@ function setup() {
 	dictionary.collider = "none";
 	dictionary.tile = "g";
 
+	bookShelf = new Group()
+	bookShelf.collider = "static";
+	bookShelf.spriteSheet = librarySheetImg;
+	bookShelf.addAni({ w: 16, h: 16, row: 6, col: 3 });
+	bookShelf.tile = "h";
+
+
 
 	new Tiles(
 		[
-			'a.......................................................b',
-			'a.......................................................b',
-			'a.......................................................b',
-			'a.......................................................b',
-			'a.........f...e.........................................b',
-			'aaaaaaa...cc..cc..aaaa..................................b',
-			'abbbbbb...cc..cc..bbbb..................................b',
-			'abbbbbb...cc..cc..bbbb..................................b',
-			'abbbbbb...cc..cc..bbbb...aaa............................b',
-			'abbbbbbdddbbddbb..bbbb..................................b',
-			'abbbbbbbbbbbbbbb..bbbb..................................b',
-			'abbbbbbbbbbbbbbb..bbbb........aaa.......................b',
-			'abbbbbbbbbbbbbbb..bbbb..................................b',
-			'abb.....................................................b',
-			'abb.....................................................b',
-			'abb...............bbbb..................................b',
-			'abb..aaa.....aaa..bbbb..................................b',
-			'abb...............bbbb..................................b',
-			'abbdddddd.g.ddddddbbbb..................................b',
+			'a...........................................................b',
+			'a...........................................................b',
+			'a..............................h............................b',
+			'a...........................h..h............................b',
+			'a.........f...e...f.........h..h............................b',
+			'aaaaaaa...cc..cc..cc..aaaaaaaaaa............................b',
+			'abbbbbb...cc..cc..cc..bbbb..................................b',
+			'abbbbbb...cc..cc..cc..bbbb..................................b',
+			'abbbbbb...cc..cc..cc..bbbb...aaa............................b',
+			'abbbbbbdddbbddbb..ccddbbbb..................................b',
+			'abbbbbbbbbbbbbbb..ccbbbbbb..................................b',
+			'abbbbbbbbbbbbbbb..ccbbbbbb........aaa.......................b',
+			'abbbbbbbbbbbbbbb..ccbbbbbb..................................b',
+			'abb.........................................................b',
+			'abb.........................................................b',
+			'abb.........................................................b',
+			'abb..aaa.....aaa.....aaa....................................b',
+			'abb.........................................................b',
+			'abbdddddd.g.ddddddddddd.....................................b',
 			'abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
 		],
 		0, 0, //x, y
@@ -199,13 +204,21 @@ function runGame()
 	} else if (kb.pressing('a')) {
 		player.changeAni('run');
 		player.scale.x = -1; // Flip sprite to face left
-	} else { // If neither 'd' nor 'a' are pressed
+	} 
+	else if (kb.pressing('w')) {
+        player.changeAni('jump');
+    }
+	else { // If neither 'd' nor 'a' are pressed
 		player.changeAni('stand');
 	}
-
+	
+	
+    
+   
+	
 	if (player.collides (lava) ) {
+		player.changeAni('damaged');
 		player.vel.y = -5; 
-		//player.vel.x = 0; 
 		health = (health - 1);
 		console.log(health)
 	}
@@ -214,6 +227,7 @@ function runGame()
 	{
 		levelLost();
 	}
+
 	
 	if (books.overlaps(player, playerCollectBook)) {
 		playerCollectBook();
@@ -232,6 +246,7 @@ function runGame()
 	}
 
 }
+
 
 function win() {
 	console.log("WINNING")
