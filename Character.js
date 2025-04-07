@@ -21,7 +21,7 @@ var acceleration = 0.25;
 // Functions
 /*******************************************************/
 function robotMovement() {
-	player.rotation = 0;
+	player.rotationLock = true;
 
 	if (movementSpeed > friction) {
 		movementSpeed = movementSpeed - friction;

@@ -7,6 +7,7 @@
 //Robot player by https://edusilvart.itch.io/robot-platform-pack
 //Other textures- books and restart button made by me in Piskel
 //Chat gpt helped with refresh screen code
+//Some code help from Caleb
 /*******************************************************/
 /*
 tasks:
@@ -42,10 +43,10 @@ var restartButton;
 let player;
 let playerAni;
 
-//let playerAni
 function preload() {
 	sheetImg = loadImage("images/Textures-16.png");
 	buttonImg = loadImage("images/restartButton.png");
+	backImg = loadImage("images/backButton.png")
 	bookImg = loadImage("images/books.png");
 	bgImg = loadImage("images/Background.png");
 	hpImg = loadImage("images/HP.png");
@@ -67,10 +68,16 @@ function setup() {
 
 	player = new Sprite(robotXPos, robotYPos, 32, 32, 'd');
 	player.spriteSheet = playerAni;
-	player.anis.offset.x = 2;
+	player.anis.offset.x = 1;
+	player.anis.offset.y = -5;
 	player.anis.frameDelay = 8;
 	player.scale.x = 1;
 	player.scale.y = 1;
+	//player.debug = true;
+	player.h=20;
+	player.anis.h=32;
+	player.w=20;
+	player.anis.w=32;
 
 	player.addAnis({
 		stand: { row: 0, frames: 5 },
@@ -141,26 +148,26 @@ function setup() {
 
 	new Tiles(
 		[
-			'a...........................................................b',
-			'a...........................................................b',
-			'a..............................h............................b',
-			'a...........................h..h............................b',
-			'a.........f...e...f.........h..h............................b',
-			'aaaaaaa...cc..cc..cc..aaaaaaaaaa............................b',
-			'abbbbbb...cc..cc..cc..bbbb..................................b',
-			'abbbbbb...cc..cc..cc..bbbb..................................b',
-			'abbbbbb...cc..cc..cc..bbbb...aaa............................b',
-			'abbbbbbdddbbddbb..ccddbbbb..................................b',
-			'abbbbbbbbbbbbbbb..ccbbbbbb..................................b',
-			'abbbbbbbbbbbbbbb..ccbbbbbb........aaa.......................b',
-			'abbbbbbbbbbbbbbb..ccbbbbbb..................................b',
-			'abb.........................................................b',
-			'abb.........................................................b',
-			'abb.........................................................b',
-			'abb..aaa.....aaa.....aaa....................................b',
-			'abb.........................................................b',
-			'abbdddddd.g.ddddddddddd.....................................b',
-			'abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+			'..a...........................................................b',
+			'..a..............................e............................b',
+			'..a...........................e..h............................b',
+			'..a...........................h..h............................b',
+			'..a.........f...e...f.........h..h............................b',
+			'..aaaaaaaa..cc..cc..cc..aaaaaaaaaaaaaaaa......................b',
+			'..abbbbbbb..cc..cc..cc..bbbb..................................b',
+			'..abbbbbbb..cc..cc..cc..bbbb..................................b',
+			'..abbbbbbb..cc..cc..cc..bbbb...aaa............................b',
+			'..abbbbbbbddbbddbbddbbddbbbb..................................b',
+			'..abbbbbbbbbbbbbbbbbbbbbbbbb..................................b',
+			'..abbbbbbbbbbbbbbbbbbbbbbbbb........aaa.......................b',
+			'..abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb...................b',
+			'..bbb.........................................................b',
+			'..............................................................b',
+			'..............................................................b',
+			'.......aaa.....aaa.....aaa....................................b',
+			'..bbb.......................b.................................b',
+			'bbbbbdddddd.g.ddddd.g.dddd...b.................................b',
+			'bbabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
 		],
 		0, 0, //x, y
 		16, 16 //w, h
@@ -212,10 +219,6 @@ function runGame()
 		player.changeAni('stand');
 	}
 	
-	
-    
-   
-	
 	if (player.collides (lava) ) {
 		player.changeAni('damaged');
 		player.vel.y = -5; 
@@ -244,22 +247,19 @@ function runGame()
 	if (issueDesk.collides(player, levelCompleted)) {
 		levelCompleted();
 	}
-
 }
 
 
 function win() {
 	console.log("WINNING")
 	mouseInteractRestartButton();
-
-
+	mouseInteractBackButton();
 }
 
 function levelCompleted() {
 	console.log("I collided")
 	gameState = "win";
 	score = score + 150
-	//Will change the game to the win screen
 
 	//Clearing out the screen
 	player.remove();
@@ -287,15 +287,15 @@ function levelCompleted() {
 	text("Books issued: " + booksFound + "/3", CANVAS_WIDTH / 2, 150)
 
 	restart();
+	back();
 	booksCollectedUI();
-	
 }
 
 
 function lose() {
 	console.log("I LOST :(");
 	mouseInteractRestartButton();
-
+	mouseInteractBackButton();
 }
 
 function levelLost() {
@@ -326,6 +326,7 @@ function levelLost() {
 	text("Books issued: " + booksFound + "/3", CANVAS_WIDTH / 2, 150)
 
 	restart();
+	back();
 	booksCollectedUI();
 }
 
@@ -362,10 +363,11 @@ function playerCollectComic(c) {
 }
 
 function restart() {
-	restartButton = new Sprite(CANVAS_WIDTH / 2, 200);
+	restartButton = new Sprite(CANVAS_WIDTH / 2 + 60, 200);
 	restartButton.spriteSheet = buttonImg;
 	restartButton.addAni({ w: 16, h: 16, row: 0, col: 0, });
 	restartButton.collider = "static";
+	restartButton.scale = 2;
 }
 
 function mouseInteractRestartButton() {
@@ -377,6 +379,26 @@ function mouseInteractRestartButton() {
 	}
 	if (restartButton.mouse.pressing()) {
 		window.location.href = "Game.html";
+	}
+}
+
+function back(){
+	backButton = new Sprite (CANVAS_WIDTH / 2 -60, 200);
+	backButton.spriteSheet = backImg;
+	backButton.addAni ({w:16, h:16, row:1, col:0,}); 
+	backButton.collider = "static"; 
+	backButton.scale = 2;
+}
+
+function mouseInteractBackButton () {
+	if (backButton.mouse.hovering()) {
+		backButton.addAni ({w:16, h:16, row:1, col:0,}); 
+	}
+	else {
+		backButton.addAni ({w:16, h:16, row:0, col:0,});     
+	}
+	if (backButton.mouse.pressing()) {
+		window.location.href = "index.html";
 	}
 }
 
