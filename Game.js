@@ -27,15 +27,15 @@ var booksFound = 0;
 var booksFoundGroup;
 const CANVAS_WIDTH = 450;
 const CANVAS_HEIGHT = 300;
-var robotXPos = 50;
-var robotYPos = 0;
+var robotXPos = 60;
+var robotYPos = 150;
 
 //ground variables
 let sheetImg;
 let wood, bookBoxes, planks, lava;
 
 //Special blocks
-var issueDesk;
+var finishLine;
 var restartButton;
 
 //player
@@ -48,6 +48,7 @@ function preload() {
 	buttonImg = loadImage("images/restartButton.png");
 	backImg = loadImage("images/backButton.png")
 	bookImg = loadImage("images/books.png");
+	flagImg = loadImage("images/flag.png");
 	bgImg = loadImage("images/Background.png");
 	hpImg = loadImage("images/HP.png");
 	playerAni = loadImage("images/playerSpritesheet.png");
@@ -73,10 +74,10 @@ function setup() {
 	player.anis.frameDelay = 8;
 	player.scale.x = 1;
 	player.scale.y = 1;
-	//player.debug = true;
+	player.debug = true;
 	player.h=20;
 	player.anis.h=32;
-	player.w=20;
+	player.w=17;
 	player.anis.w=32;
 
 	player.addAnis({
@@ -87,12 +88,15 @@ function setup() {
 		damaged: {row: 4, col: 4, frames: 2},
 		destroyed: {row: 4, col: 4, frames: 5}
 	});
-	player.changeAni('stand');
+	//player.changeAni('stand');
 
 	//Finish line
 
-	issueDesk = new Sprite(651, 220, 32, 64), 'd';
-	issueDesk.collider = "static";
+	finishLine = new Sprite(651, 280, 16, 16), 'd';
+	finishLine.collider = "none";
+	finishLine.spriteSheet = flagImg;
+	finishLine.addAni({ w: 16, h: 16, row: 0, col: 0 });
+	finishLine.scale = 2;
 
 	//Tiles - tile key goes from a in alphabetical order
 
@@ -119,6 +123,7 @@ function setup() {
 	lava.spriteSheet = sheetImg;
 	lava.addAni({ w: 16, h: 16, row: 9, col: 0 });
 	lava.tile = "d";
+	lava.debug = true;
 
 	books = new Group()
 	books.collider = "none";
@@ -148,6 +153,13 @@ function setup() {
 
 	new Tiles(
 		[
+			'..............................................................b',
+			'........................................g.....................b',
+			'.......................................aaa....................b',
+			'..............................................................b',
+			'..............................................................b',
+			'..a...........................................................b',
+			'..a.................................daa.......................b',
 			'..a...........................................................b',
 			'..a..............................e............................b',
 			'..a...........................e..h............................b',
@@ -226,7 +238,7 @@ function runGame()
 		console.log(health)
 	}
 
-	if (player.y >= 300 || (health <= 0)) 
+	if (player.y >= 600 || (health <= 0)) 
 	{
 		levelLost();
 	}
@@ -244,7 +256,7 @@ function runGame()
 		playerCollectComic();
 	}
 
-	if (issueDesk.collides(player, levelCompleted)) {
+	if (finishLine.overlaps(player, levelCompleted)) {
 		levelCompleted();
 	}
 }
@@ -266,7 +278,7 @@ function levelCompleted() {
 	wood.removeAll();
 	bookBoxes.removeAll();
 	planks.removeAll();
-	issueDesk.remove();
+	finishLine.remove();
 	books.removeAll();
 	comic.removeAll();
 	dictionary.removeAll();
@@ -306,7 +318,7 @@ function levelLost() {
 	bookBoxes.removeAll();
 	lava.removeAll();
 	planks.removeAll();
-	issueDesk.remove();
+	finishLine.remove();
 	books.removeAll();
 	comic.removeAll();
 	dictionary.removeAll();
