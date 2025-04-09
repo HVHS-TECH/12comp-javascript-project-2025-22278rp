@@ -30,9 +30,9 @@ const CANVAS_HEIGHT = 300;
 var robotXPos = 60;
 var robotYPos = 150;
 
-//ground variables
+//variables for ground tiles
 let sheetImg;
-let wood, bookBoxes, planks, lava;
+let wood, bookBoxes, planks, lava, bookShelf;
 
 //Special blocks
 var finishLine;
@@ -62,7 +62,7 @@ function setup() {
 	cnv = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT, 'pixelated x3');
 	world.gravity.y = 10;
 	score = 0;
-	booksFoundGroup = new Group ();
+
 	hpBlocks = new Group();
 
 	//player
@@ -74,29 +74,28 @@ function setup() {
 	player.anis.frameDelay = 8;
 	player.scale.x = 1;
 	player.scale.y = 1;
-	player.debug = true;
-	player.h=20;
-	player.anis.h=32;
-	player.w=17;
-	player.anis.w=32;
+	player.h = 20;
+	player.anis.h = 32;
+	player.w = 17;
+	player.anis.w = 32;
 
 	player.addAnis({
 		stand: { row: 0, frames: 5 },
 		run: { row: 0, col: 6, frames: 4 },
-		jump: {row: 1, col: 1, frames: 10},
-		fall: {row: 1, col: 6, frames: 4},
-		damaged: {row: 4, col: 4, frames: 2},
-		destroyed: {row: 4, col: 4, frames: 5}
+		jump: { row: 1, col: 1, frames: 10 },
+		fall: { row: 1, col: 6, frames: 4 },
+		damaged: { row: 4, col: 4, frames: 2 },
+		destroyed: { row: 4, col: 4, frames: 5 }
 	});
-	//player.changeAni('stand');
 
 	//Finish line
 
-	finishLine = new Sprite(651, 280, 16, 16), 'd';
+	finishLine = new Group()
 	finishLine.collider = "none";
 	finishLine.spriteSheet = flagImg;
 	finishLine.addAni({ w: 16, h: 16, row: 0, col: 0 });
 	finishLine.scale = 2;
+	finishLine.tile = "w"
 
 	//Tiles - tile key goes from a in alphabetical order
 
@@ -123,7 +122,6 @@ function setup() {
 	lava.spriteSheet = sheetImg;
 	lava.addAni({ w: 16, h: 16, row: 9, col: 0 });
 	lava.tile = "d";
-	lava.debug = true;
 
 	books = new Group()
 	books.collider = "none";
@@ -149,6 +147,8 @@ function setup() {
 	bookShelf.addAni({ w: 16, h: 16, row: 6, col: 3 });
 	bookShelf.tile = "h";
 
+	booksFoundGroup = new Group();
+
 
 
 	new Tiles(
@@ -159,27 +159,27 @@ function setup() {
 			'..............................................................b',
 			'..............................................................b',
 			'..a...........................................................b',
-			'..a.................................daa.......................b',
-			'..a...........................................................b',
-			'..a..............................e............................b',
-			'..a...........................e..h............................b',
-			'..a...........................h..h............................b',
-			'..a.........f...e...f.........h..h............................b',
-			'..aaaaaaaa..cc..cc..cc..aaaaaaaaaaaaaaaa......................b',
-			'..abbbbbbb..cc..cc..cc..bbbb..................................b',
-			'..abbbbbbb..cc..cc..cc..bbbb..................................b',
-			'..abbbbbbb..cc..cc..cc..bbbb...aaa............................b',
-			'..abbbbbbbddbbddbbddbbddbbbb..................................b',
-			'..abbbbbbbbbbbbbbbbbbbbbbbbb..................................b',
-			'..abbbbbbbbbbbbbbbbbbbbbbbbb........aaa.......................b',
+			'..a.................................dbb.......................b',
+			'..a.................................hhh.......................b',
+			'..a..............................e..hhh.......................b',
+			'..a...........................e..h..hhh.......................b',
+			'..a...........................h..h..hhh.......................b',
+			'..a.........f...e...f.........h..h..hhh.......................b',
+			'..aaaaaaaa..cc..cc..cc..aaaaaaaaaaaaaaaaddddaaaaaaaa....aaaaaab',
+			'..abbbbbbb..cc..cc..cc..bbbbbbbbbbbbbbbbbbb...................b',
+			'..abbbbbbb..cc..cc..cc..bbbbbbbbbbbbbbbbbbb...................b',
+			'..abbbbbbb..cc..cc..cc..bbbbbbbbbbbbbbbbbbb........f..........b',
+			'..abbbbbbbddbbddbbddbbddbbbbbbbbbbbbbbbbbbb.......hhh.........b',
 			'..abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb...................b',
+			'..abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb...............f...b',
+			'..abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.............hdh...b',
 			'..bbb.........................................................b',
 			'..............................................................b',
 			'..............................................................b',
-			'.......aaa.....aaa.....aaa....................................b',
-			'..bbb.......................b.................................b',
-			'bbbbbdddddd.g.ddddd.g.dddd...b.................................b',
-			'bbabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+			'.......aaa.....aaa.....aaa..........e....e....................b',
+			'..bbb.........................c.....c....c....................b',
+			'bbbbbdddddd.g.ddddd.g.ddddddddddddddddddddd.....c......c....w.b',
+			'bbbbbddddddbbbdddddbbbddddddddddddddddddddddddddddddddddddbbbbb'
 		],
 		0, 0, //x, y
 		16, 16 //w, h
@@ -206,13 +206,13 @@ function draw() {
 // Functions
 /*******************************************************/
 
-function runGame() 
-{
+function runGame() {
 	clear();
 	robotMovement();
 	background(bgImg);
 	displayScore();
 	healthbar();
+	levelBoundary()
 
 	camera.x = player.x
 	camera.y = player.y
@@ -223,27 +223,26 @@ function runGame()
 	} else if (kb.pressing('a')) {
 		player.changeAni('run');
 		player.scale.x = -1; // Flip sprite to face left
-	} 
+	}
 	else if (kb.pressing('w')) {
-        player.changeAni('jump');
-    }
+		player.changeAni('jump');
+	}
 	else { // If neither 'd' nor 'a' are pressed
 		player.changeAni('stand');
 	}
-	
-	if (player.collides (lava) ) {
+
+	if (player.collides(lava)) {
 		player.changeAni('damaged');
-		player.vel.y = -5; 
+		player.vel.y = -5;
 		health = (health - 1);
 		console.log(health)
 	}
 
-	if (player.y >= 600 || (health <= 0)) 
-	{
+	if (health <= 0) {
 		levelLost();
 	}
 
-	
+
 	if (books.overlaps(player, playerCollectBook)) {
 		playerCollectBook();
 	}
@@ -296,7 +295,7 @@ function levelCompleted() {
 	textAlign(CENTER, CENTER);
 	text("YOU WON!!", CANVAS_WIDTH / 2, 50);
 	text("Score: " + score, CANVAS_WIDTH / 2, 100);
-	text("Books issued: " + booksFound + "/3", CANVAS_WIDTH / 2, 150)
+	text("Books issued: " + booksFound + "/12", CANVAS_WIDTH / 2, 150)
 
 	restart();
 	back();
@@ -335,7 +334,7 @@ function levelLost() {
 	textAlign(CENTER, CENTER);
 	text("YOU LOST", CANVAS_WIDTH / 2, 50);
 	text("Score: " + score, CANVAS_WIDTH / 2, 100);
-	text("Books issued: " + booksFound + "/3", CANVAS_WIDTH / 2, 150)
+	text("Books issued: " + booksFound + "/12", CANVAS_WIDTH / 2, 150)
 
 	restart();
 	back();
@@ -394,20 +393,20 @@ function mouseInteractRestartButton() {
 	}
 }
 
-function back(){
-	backButton = new Sprite (CANVAS_WIDTH / 2 -60, 200);
+function back() {
+	backButton = new Sprite(CANVAS_WIDTH / 2 - 60, 200);
 	backButton.spriteSheet = backImg;
-	backButton.addAni ({w:16, h:16, row:1, col:0,}); 
-	backButton.collider = "static"; 
+	backButton.addAni({ w: 16, h: 16, row: 1, col: 0, });
+	backButton.collider = "static";
 	backButton.scale = 2;
 }
 
-function mouseInteractBackButton () {
+function mouseInteractBackButton() {
 	if (backButton.mouse.hovering()) {
-		backButton.addAni ({w:16, h:16, row:1, col:0,}); 
+		backButton.addAni({ w: 16, h: 16, row: 1, col: 0, });
 	}
 	else {
-		backButton.addAni ({w:16, h:16, row:0, col:0,});     
+		backButton.addAni({ w: 16, h: 16, row: 0, col: 0, });
 	}
 	if (backButton.mouse.pressing()) {
 		window.location.href = "index.html";
@@ -416,32 +415,39 @@ function mouseInteractBackButton () {
 
 function booksCollectedUI() {
 	for (var i = 0; i < booksFound; i++) {
-		bookFoundSprite = new Sprite(50+30*i, 250, 50, 50);
+		bookFoundSprite = new Sprite(50 + 30 * i, 250, 50, 50);
 		bookFoundSprite.collider = "static";
 		bookFoundSprite.spriteSheet = bookImg;
 		bookFoundSprite.addAni({ w: 16, h: 16, row: 0, col: 0, });
-	  }
+	}
 }
 
 function healthbar() {
 	hpBlocks.removeAll();
-	fill(255); 
-	textSize(20); 
+	fill(255);
+	textSize(20);
 	text("HP:", 150, 20);
-	for (var i = 0; i < health; i++) 
-	{
-		
-		let block = new Sprite (200 + 30 * i, 15, 20, 20); 
+	for (var i = 0; i < health; i++) {
+
+		let block = new Sprite(200 + 30 * i, 15, 20, 20);
 		block.colour = ("red");
 		block.spriteSheet = hpImg;
 		block.addAni({ w: 32, h: 32, row: 0, col: 0 });
 		noStroke();
 		block.collider = "none";
 		hpBlocks.add(block);
-		
-		
+
+
 	}
 	// Update and draw the health blocks in the group
-  	hpBlocks.draw();
+	hpBlocks.draw();
+}
+
+function levelBoundary() {
+		if (player.x > CANVAS_WIDTH || player.y > CANVAS_HEIGHT || player.y >= 600) {
+			// Prevents the player from moving out of bounds
+			console.warn('Player is out of bounds!');
+			health = (health - 1);
+		}
 }
 
