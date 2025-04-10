@@ -11,7 +11,7 @@
 var maxSpeed = 2;
 var friction = 0.125;
 var movementSpeed = 0;
-const JUMP_SPEED = 20;
+const JUMP_SPEED = 4;
 var acceleration = 0.25;
 
 /*******************************************************/
