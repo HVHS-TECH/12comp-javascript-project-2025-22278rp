@@ -33,7 +33,7 @@ const PLAYER_XPOS = 60;
 const PLAYER_YPOS = 150;
 
 //Maximum ammount of books you can collect
-const MAX_BOOKS = 12;
+const MAX_BOOKS = 15;
 
 //variables for ground tiles
 let sheetImg;
@@ -66,37 +66,35 @@ function preload() {
 // setup
 /*******************************************************/
 function setup() {
-	//Setting variable preamter
+	//Setting variable data
 	cnv = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT, 'pixelated x3');
 	world.gravity.y = 10;
 	score = 0;
 
 	hpBlocks = new Group();
 
-	//player
+	//player sprite, hitbox and animations
 
 	player = new Sprite(PLAYER_XPOS, PLAYER_YPOS, 32, 32, 'd');
+
 	player.spriteSheet = playerAni;
+	player.anis.h = 32;
+	player.anis.w = 32;
 	player.anis.offset.x = 1;
 	player.anis.offset.y = -5;
 	player.anis.frameDelay = 8;
 	player.scale.x = 1;
 	player.scale.y = 1;
 	player.h = 20;
-	player.anis.h = 32;
 	player.w = 17;
-	player.anis.w = 32;
-
+	
 	player.addAnis({
 		stand: { row: 0, frames: 5 },
 		run: { row: 0, col: 6, frames: 4 },
 		jump: { row: 1, col: 1, frames: 10 },
-		fall: { row: 1, col: 6, frames: 4 },
-		damaged: { row: 4, col: 4, frames: 2 },
-		destroyed: { row: 4, col: 4, frames: 5 }
 	});
 
-	//Finish line
+	//Finish line - player overlaps with this to change gamestate to win
 
 	finishLine = new Group()
 	finishLine.collider = "none";
@@ -105,7 +103,7 @@ function setup() {
 	finishLine.scale = 2;
 	finishLine.tile = "w"
 
-	//Tiles - tile key goes from a in alphabetical order
+	//Tiles and books - tile key goes from a in alphabetical order
 
 	wood = new Group()
 	wood.collider = "static";
@@ -154,6 +152,8 @@ function setup() {
 	bookShelf.spriteSheet = librarySheetImg;
 	bookShelf.addAni({ w: 16, h: 16, row: 6, col: 3 });
 	bookShelf.tile = "h";
+
+	//Level map using tiles
 
 	new Tiles(
 		[
@@ -221,6 +221,8 @@ function runGame() {
 	camera.x = player.x
 	camera.y = player.y
 
+	//Sets when the animations for the player appears
+
 	if (kb.pressing('d')) {
 		player.changeAni('run');
 		player.scale.x = 1; // Make sure sprite faces right (not flipped)
@@ -236,11 +238,12 @@ function runGame() {
 	}
 
 	if (player.collides(lava)) {
-		player.changeAni('damaged');
 		player.vel.y = -5;
 		health = (health - 1);
 		console.log(health)
 	}
+
+	//Losing conditions
 
 	if (health <= 0 || player.y >= 1000) {
 		levelLost();
@@ -423,7 +426,7 @@ function mouseInteractBackButton() {
 function booksCollectedUI() {
 	for (var i = 0; i < collectedTypes.length; i++) {
 		let bookType = collectedTypes[i];
-		let bookSprite = new Sprite(50 + 30 * i, 250, 50, 50);
+		let bookSprite = new Sprite(20 + 30 * i, 250, 50, 50);
 		bookSprite.collider = "static";
 		bookSprite.spriteSheet = bookImg;
 

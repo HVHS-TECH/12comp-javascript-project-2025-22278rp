@@ -57,7 +57,7 @@ function robotMovement() {
 		player.vel.x = movementSpeed;
 	}
 
-	if (kb.presses('w') && player.vel.y == 0) {
+	if (kb.presses('w') && player.colliding(wood) || kb.presses('w') && player.colliding(planks) || kb.presses('w') && player.colliding(bookShelf) || kb.presses('w') && player.colliding(bookBoxes)) {
 		player.vel.y = -JUMP_SPEED;
 	}
 
