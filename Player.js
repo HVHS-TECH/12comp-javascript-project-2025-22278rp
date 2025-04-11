@@ -17,9 +17,13 @@ var acceleration = 0.25;
 /*******************************************************/
 // Functions
 /*******************************************************/
+// Function to handle all player movement logic
 function robotMovement() {
+	// Lock rotation so the robot doesn't spin when colliding
 	player.rotationLock = true;
 
+	// Apply friction to slow down movement over time
+	// (Simulates natural deceleration when no keys are pressed)
 	if (movementSpeed > friction) {
 		movementSpeed = movementSpeed - friction;
 

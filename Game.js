@@ -157,33 +157,33 @@ function setup() {
 
 	new Tiles(
 		[
-			'.....................................................e................................................b',
-			'........................................g............cc...............................................b',
-			'.......................................aaa............................................................b',
+			'......................................................hhhh............................................b',
+			'........................................g...............hh............................................b',
+			'.......................................aaa..............hh............................................b',
+			'........................................................hh............................................b',
+			'................................................w.......hh............................................b',
+			'..a............................................aaaa.....hh............................................b',
+			'..a.................................dbb...c....hhhh.....hh............................................b',
+			'..a.................................hhh........hhhh.....hh............................................b',
+			'..a..............................e..hhh........hhhh.....hh............................................b',
+			'..a...........................e..h..hhh........hhhh.....hh............................................b',
+			'..a...........................h..h.............hhhh.....hh............................................b',
+			'..a.........f...e...f.........h..h.............hhhh.....hh............................................b',
+			'..aaaaaaaa..cc..cc..cc..aaaaaaaaaaaaaaadddd....aaaa.....aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab',
+			'..abbbbbbb..cc..cc..cc..bbbbbbbbbbbbbbbbbbb.............bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+			'..abbbbbbb..cc..cc..cc..bbbbbbbbbbbbbbbbbbb.............bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+			'..abbbbbbb..cc..cc..cc..bbbbbbbbbbbbbbbbbbb.............bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+			'..abbbbbbbddbbddbbddbbddbbbbbbbbbbbbbbbbbbb.f.........f.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+			'..abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbhh.........hhbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+			'..abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.............bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+			'..abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.....f.......bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+			'..bbb..........................................hhh....................................................b',
 			'......................................................................................................b',
-			'..............................................aaaa....................................................b',
-			'..a...........................................hhhh....................................................b',
-			'..a.................................dbb...c...hhhh....................................................b',
-			'..a.................................hhh.......hhhh....................................................b',
-			'..a..............................e..hhh.......hhhh....................................................b',
-			'..a...........................e..h..hhh.......hhhh....................................................b',
-			'..a...........................h..h............hhhh....................................................b',
-			'..a.........f...e...f.........h..h............hhhh.................................................w..b',
-			'..aaaaaaaa..cc..cc..cc..aaaaaaaaaaaaaaadddd...aaaa......aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab',
-			'..abbbbbbb..cc..cc..cc..bbbbbbbbbbbbbbbbbbb...........................................................b',
-			'..abbbbbbb..cc..cc..cc..bbbbbbbbbbbbbbbbbbb...........................................................b',
-			'..abbbbbbb..cc..cc..cc..bbbbbbbbbbbbbbbbbbb....f......................................................b',
-			'..abbbbbbbddbbddbbddbbddbbbbbbbbbbbbbbbbbbb...hhh.....................................................b',
-			'..abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb...........................................................b',
-			'..abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.............f.............................................b',
-			'..abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.............hhd...........................................b',
-			'..bbb..........................................f......................................................b',
-			'...............................................hhh....................................................b',
-			'.................................................h....................................................b',
-			'......................................................................................................b',
-			'.......aaa.....aaa.....aaa..........e....e.............cc.............................................b',
-			'..bbb.........................c.....c....c......c......cc.............................................b',
-			'bbbbbdddddd.g.ddddd.g.bdddddddddddddddddddddddddddddddddddb...........................................b',
+			'.....................................................................e................................b',
+			'..............................................................h......h......h.....................g..wb',
+			'.......aaa.....aaa.....aaa..........e....e.............cc.....h.............h......aa.............aaaab',
+			'..bbb.........................c.....c....c......c......cc.....h.............h............cc.......bbbbb',
+			'bbbbbdddddd.g.ddddd.g.bdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddb',
 			'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
 		],
 		0, 0, //x, y
@@ -202,8 +202,8 @@ function draw() {
 	if (gameState == "win") {
 		win();
 	}
-	if (gameState == "lose") {
-		lose();
+	if (gameState == "lost") {
+		lost();
 	}
 }
 
@@ -211,6 +211,7 @@ function draw() {
 // Functions
 /*******************************************************/
 
+//draws all the game mechanics, animations and collisions
 function runGame() {
 	clear();
 	robotMovement();
@@ -219,7 +220,7 @@ function runGame() {
 	healthbar();
 
 	camera.x = player.x
-	camera.y = player.y
+	camera.y = player.y //the camera follows the player's movements
 
 	//Sets when the animations for the player appears
 
@@ -238,9 +239,9 @@ function runGame() {
 	}
 
 	if (player.collides(lava)) {
-		player.vel.y = -5;
-		health = (health - 1);
-		console.log(health)
+		player.vel.y = -5; 
+		health = (health - 1); //lowers health everytime you collide with lava
+		console.log(health) //tracks how much health is left
 	}
 
 	//Losing conditions
@@ -269,15 +270,16 @@ function runGame() {
 
 
 function win() {
+	//setup for the win state
 	console.log("WINNING")
 	mouseInteractRestartButton();
 	mouseInteractBackButton();
 }
 
 function levelCompleted() {
-	console.log("I collided")
+	//draw for the win state
 	gameState = "win";
-	score = score + 150
+	score = score + 150 //adds extra score for reaching the flag pole
 
 	//Clearing out the screen
 	player.remove();
@@ -294,31 +296,35 @@ function levelCompleted() {
 	//Winning screen
 
 	camera.x = CANVAS_WIDTH / 2;
-	camera.y = CANVAS_HEIGHT / 2;
+	camera.y = CANVAS_HEIGHT / 2; //centers the camera
 
 	background("yellow");
 	textSize(20)
 	fill("black");
 	textAlign(CENTER, CENTER);
+	//results for the player
 	text("YOU WON!!", CANVAS_WIDTH / 2, 50);
 	text("Score: " + score, CANVAS_WIDTH / 2, 100);
 	text("Books issued: " + booksFound + "/" + MAX_BOOKS, CANVAS_WIDTH / 2, 150)
 
 	restart();
 	back();
-	booksCollectedUI();
+	booksCollectedUI(); //shows the diffrent books you've collected on screen
 }
 
 
-function lose() {
+function lost() {
+	//setup for lost state
 	console.log("I LOST :(");
 	mouseInteractRestartButton();
 	mouseInteractBackButton();
 }
 
 function levelLost() {
-	gameState = "lose";
+	//draw for lost state
+	gameState = "lost";
 
+	//clearing out the screen
 	player.remove();
 	wood.remove();
 	bookBoxes.removeAll();
@@ -333,27 +339,30 @@ function levelLost() {
 	//losing screen
 
 	camera.x = CANVAS_WIDTH / 2;
-	camera.y = CANVAS_HEIGHT / 2;
+	camera.y = CANVAS_HEIGHT / 2; //centers the camera
 
 	background("red");
 	textSize(20)
 	fill("black");
 	textAlign(CENTER, CENTER);
+	//results for the player
 	text("YOU LOST", CANVAS_WIDTH / 2, 50);
 	text("Score: " + score, CANVAS_WIDTH / 2, 100);
 	text("Books issued: " + booksFound + "/" + MAX_BOOKS, CANVAS_WIDTH / 2, 150)
 
 	restart();
 	back();
-	booksCollectedUI();
+	booksCollectedUI(); //shows the diffrent books you've collected on screen
 }
 
+//displays the current score of the game
 function displayScore() {
 	textSize(20);
 	text("Score: " + score, 0, 20);
 	fill("white");
 }
 
+//shows to the console log what key was pressed
 function keyPressed() {
 	console.log(keyCode)
 }
@@ -370,7 +379,7 @@ function playerCollectDictionary(d) {
 	d.remove();
 	score = score + 500
 	booksFound++
-	collectedTypes.push("Dictionary");
+	collectedTypes.push("Dictionary"); // Track the type
 }
 
 function playerCollectComic(c) {
@@ -378,9 +387,10 @@ function playerCollectComic(c) {
 	c.remove();
 	score = score + 50
 	booksFound++
-	collectedTypes.push("Comic");
+	collectedTypes.push("Comic"); // Track the type
 }
 
+//spawning the restart button
 function restart() {
 	restartButton = new Sprite(CANVAS_WIDTH / 2 + 60, 200);
 	restartButton.spriteSheet = buttonImg;
@@ -390,8 +400,9 @@ function restart() {
 }
 
 function mouseInteractRestartButton() {
-	if (!restartButton) return;
+	if (!restartButton) return; //if there is no restart button present
 
+	//animations for the button when hovering over it
 	if (restartButton.mouse.hovering()) {
 		restartButton.addAni({ w: 16, h: 16, row: 1, col: 0, });
 	}
@@ -399,10 +410,11 @@ function mouseInteractRestartButton() {
 		restartButton.addAni({ w: 16, h: 16, row: 0, col: 0, });
 	}
 	if (restartButton.mouse.pressing()) {
-		window.location.href = "Game.html";
+		window.location.href = "Game.html"; //sends you to the start of the game reseting everything
 	}
 }
 
+//spawning the back button
 function back() {
 	backButton = new Sprite(CANVAS_WIDTH / 2 - 60, 200);
 	backButton.spriteSheet = backImg;
@@ -412,6 +424,7 @@ function back() {
 }
 
 function mouseInteractBackButton() {
+	//animations for back button when hovering over it
 	if (backButton.mouse.hovering()) {
 		backButton.addAni({ w: 16, h: 16, row: 1, col: 0, });
 	}
@@ -419,13 +432,13 @@ function mouseInteractBackButton() {
 		backButton.addAni({ w: 16, h: 16, row: 0, col: 0, });
 	}
 	if (backButton.mouse.pressing()) {
-		window.location.href = "index.html";
+		window.location.href = "index.html"; //sends you to the title screen
 	}
 }
 
 function booksCollectedUI() {
-	for (var i = 0; i < collectedTypes.length; i++) {
-		let bookType = collectedTypes[i];
+	for (var i = 0; i < collectedTypes.length; i++) { //spawns the books you collected on screen
+		let bookType = collectedTypes[i]; //The data of each type
 		let bookSprite = new Sprite(20 + 30 * i, 250, 50, 50);
 		bookSprite.collider = "static";
 		bookSprite.spriteSheet = bookImg;
